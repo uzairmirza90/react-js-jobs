@@ -1,12 +1,18 @@
 import "./App.css";
-import Login from "./components/SignIn/Login";
+import Login from "./components/Login/Login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Register from "./components/Register/Register";
 import LandingPage from "./views/LandingPage/landingPage";
-function app() {
+function App() {
   return (
-    <div>
-      <LandingPage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default app;
+export default App;

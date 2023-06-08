@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import logoImage from "../../assets/logo.jpg";
 import { useState } from "react";
 
-import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -30,15 +30,7 @@ export default function SignIn() {
   const [isValidPass, setIsValidPass] = useState(false);
   const [isWrongEmail, setIsWrongEmail] = useState(false);
   const [isWrongPass, setIsWrongPass] = useState(false);
-  const [nameChange, setNameChange] = useState("");
-  const [isNameValid, setIsNameValid] = useState(false);
-  const [isWrongName, setIsWrongName] = useState(false);
-  const [isNotMember, setIsNotMember] = useState(false);
 
-  const nameChangeHandler = (event) => {
-    setNameChange(event.target.value);
-    setIsWrongName(false);
-  };
   const emailHandler = function (event) {
     setEmail(event.target.value);
     setIsWrongEmail(false);
@@ -47,16 +39,11 @@ export default function SignIn() {
     setPassword(event.target.value);
     setIsWrongPass(false);
   };
-  const registerHandler = (e) => {
-    e.preventDefault();
-    setIsNotMember((prevState) => !prevState);
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsWrongEmail(true);
     setIsWrongPass(true);
-    setIsWrongName(true);
 
     const isEmailValid =
       /^[^A-Z]*$/.test(email.trim()) &&
@@ -68,7 +55,6 @@ export default function SignIn() {
       /[A-Z]/.test(password) &&
       /[!@#$%^&*]/.test(password);
 
-    setIsNameValid(nameChange.trim().length > 0);
     setIsValidEmail(isEmailValid);
     setIsValidPass(isPassValid);
     console.log(email, password);
@@ -120,7 +106,7 @@ export default function SignIn() {
             variant="h5"
             sx={{ mb: 2, fontWeight: "normal" }}
           >
-            {isNotMember ? "Register" : "Login"}
+            Login
           </Typography>
           <Box
             component="form"
@@ -128,43 +114,12 @@ export default function SignIn() {
             noValidate
             sx={{ mt: 1 }}
           >
-            {isNotMember && (
-              <Box>
-                <Typography variant="p">Name</Typography>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="name"
-                  name="name"
-                  autoComplete="name"
-                  onChange={nameChangeHandler}
-                  error={!isNameValid && isWrongName}
-                  helperText={
-                    !isNameValid && isWrongName ? "please enter you name" : ""
-                  }
-                  sx={{
-                    mt: 1,
-                    mb: 3,
-                    "& .MuiInputBase-input": {
-                      height: "10px",
-                    },
-                  }}
-                  InputProps={{
-                    sx: {
-                      backgroundColor: "#f8f8ff",
-                    },
-                  }}
-                />
-              </Box>
-            )}
             <Typography variant="p">Email</Typography>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
-              // label="Email Address"
               name="email"
               autoComplete="email"
               autoFocus
@@ -235,9 +190,13 @@ export default function SignIn() {
               Sumbit
             </Button>
             <Typography variant="p" sx={{ ml: 8 }}>
-              {isNotMember ? "Already a member? " : "Not a member yet? "}
-              <Link href="/register" underline="none" onClick={registerHandler}>
-                {isNotMember ? "Login" : "Register"}
+              Not a member yet?
+              <Link
+                to="/Register"
+                style={{ textDecoration: "none", color: "blue" }}
+              >
+                {" "}
+                Register
               </Link>
             </Typography>
           </Box>

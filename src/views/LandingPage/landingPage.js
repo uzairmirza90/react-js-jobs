@@ -4,10 +4,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
-import { CssBaseline, Link } from "@mui/material";
+import { CssBaseline, Grid } from "@mui/material";
 import logoImage from "../../assets/logo.jpg";
 import landingImage from "../../assets/landingImage.jpg";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
+import { Link } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {
@@ -17,7 +19,9 @@ const defaultTheme = createTheme({
   },
 });
 
-const landingPage = function () {
+const LandingPage = function () {
+  const isSmallScreen = useMediaQuery("(max-width:920px)");
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="lg">
@@ -30,57 +34,86 @@ const landingPage = function () {
             flexDirection: "column",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "flex-start" }}>
-            <img src={logoImage} alt="Avatar" width={70} height={60} />
-            <Typography
-              variant="h3"
-              component="h1"
-              color="primary"
-              sx={{ fontWeight: "bold", fontSize: "32px", mt: 2, ml: -1 }}
-            >
-              JobsLand
-            </Typography>
-          </Box>
-          <Box
-            sx={{ ml: 2, mt: 22, display: "flex", alignItems: "flex-start" }}
-          >
-            <Typography
-              variant="h3"
-              component="h1"
-              color="primary"
-              sx={{
-                fontWeight: "bold",
-                fontSize: "48px",
-              }}
-            >
-              <span style={{ color: "black" }}>Job </span>
-              Tracking
-              <span style={{ color: "black" }}> App </span>
-            </Typography>
-          </Box>
-          <Box sx={{ ml: 80, mt: -20 }}>
-            <img src={landingImage} alt="landingImage" width={530} />
-          </Box>
-          <Box
-            sx={{ mt: -33, ml: 2, display: "flex", alignItems: "flex-start" }}
-          >
-            <Typography variant="p">
-              This is our job tracking app, you can search your kind of
-              <br /> job here and post for a job also.
-            </Typography>
-          </Box>
-          <Box sx={{ mt: 2, ml: 2, display: "flex", alignItems: "flex-start" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ textTransform: "none", fontSize: "20px", height: "33px" }}
-            >
-              Login/Register
-            </Button>
-          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ display: "flex", alignItems: "flex-start" }}>
+                <img src={logoImage} alt="Avatar" width={70} height={60} />
+                <Typography
+                  variant="h3"
+                  component="h1"
+                  color="primary"
+                  sx={{ fontWeight: "bold", fontSize: "32px", mt: 2, ml: -1 }}
+                >
+                  JobsLand
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  mt: 22,
+                  display: "flex",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  component="h1"
+                  color="primary"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: "48px",
+                  }}
+                >
+                  <span style={{ color: "black" }}>Job </span>
+                  Tracking
+                  <span style={{ color: "black" }}> App </span>
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  mt: 2.5,
+                  display: "flex",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Typography variant="p">
+                  This is our job tracking app, you can search for your kind of
+                  job here and post for a job as well.
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  mt: 2.5,
+                  display: "flex",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Link to="/Login">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      textTransform: "none",
+                      fontSize: "20px",
+                      height: "33px",
+                    }}
+                  >
+                    Login/Register
+                  </Button>
+                </Link>
+              </Box>
+            </Grid>
+            {!isSmallScreen && (
+              <Grid item xs={12} md={6}>
+                <Box sx={{ textAlign: "center", mt: 14 }}>
+                  <img src={landingImage} alt="landingImage" width={520} />
+                </Box>
+              </Grid>
+            )}
+          </Grid>
         </Box>
       </Container>
     </ThemeProvider>
   );
 };
-export default landingPage;
+
+export default LandingPage;
