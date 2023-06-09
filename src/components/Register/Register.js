@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import logoImage from "../../assets/logo.jpg";
 import { useState } from "react";
 
-import { Link } from "@mui/material";
+import { Link } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -33,7 +33,6 @@ export default function SignIn() {
   const [nameChange, setNameChange] = useState("");
   const [isNameValid, setIsNameValid] = useState(false);
   const [isWrongName, setIsWrongName] = useState(false);
-  const [isNotMember, setIsNotMember] = useState(false);
 
   const nameChangeHandler = (event) => {
     setNameChange(event.target.value);
@@ -46,10 +45,6 @@ export default function SignIn() {
   const passHandler = (event) => {
     setPassword(event.target.value);
     setIsWrongPass(false);
-  };
-  const registerHandler = (e) => {
-    e.preventDefault();
-    setIsNotMember((prevState) => !prevState);
   };
 
   const handleSubmit = (event) => {
@@ -120,7 +115,7 @@ export default function SignIn() {
             variant="h5"
             sx={{ mb: 2, fontWeight: "normal" }}
           >
-            {isNotMember ? "Register" : "Login"}
+            Register
           </Typography>
           <Box
             component="form"
@@ -128,46 +123,44 @@ export default function SignIn() {
             noValidate
             sx={{ mt: 1 }}
           >
-            {isNotMember && (
-              <Box>
-                <Typography variant="p">Name</Typography>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="name"
-                  name="name"
-                  autoComplete="name"
-                  onChange={nameChangeHandler}
-                  error={!isNameValid && isWrongName}
-                  helperText={
-                    !isNameValid && isWrongName ? "please enter you name" : ""
-                  }
-                  sx={{
-                    mt: 1,
-                    mb: 3,
-                    "& .MuiInputBase-input": {
-                      height: "10px",
-                    },
-                  }}
-                  InputProps={{
-                    sx: {
-                      backgroundColor: "#f8f8ff",
-                    },
-                  }}
-                />
-              </Box>
-            )}
+            <Box>
+              <Typography variant="p">Name</Typography>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                autoFocus
+                id="name"
+                name="name"
+                autoComplete="name"
+                onChange={nameChangeHandler}
+                error={!isNameValid && isWrongName}
+                helperText={
+                  !isNameValid && isWrongName ? "please enter you name" : ""
+                }
+                sx={{
+                  mt: 1,
+                  mb: 3,
+                  "& .MuiInputBase-input": {
+                    height: "10px",
+                  },
+                }}
+                InputProps={{
+                  sx: {
+                    backgroundColor: "#f8f8ff",
+                  },
+                }}
+              />
+            </Box>
+
             <Typography variant="p">Email</Typography>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
-              // label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
               onChange={emailHandler}
               error={!isValidEmail && isWrongEmail}
               helperText={
@@ -235,9 +228,13 @@ export default function SignIn() {
               Sumbit
             </Button>
             <Typography variant="p" sx={{ ml: 8 }}>
-              {isNotMember ? "Already a member? " : "Not a member yet? "}
-              <Link href="/register" underline="none" onClick={registerHandler}>
-                {isNotMember ? "Login" : "Register"}
+              Already a member?
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "#0d47a1" }}
+              >
+                {" "}
+                Login
               </Link>
             </Typography>
           </Box>
