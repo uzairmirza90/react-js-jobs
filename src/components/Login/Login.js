@@ -192,8 +192,8 @@ export default function SignIn() {
             <Typography variant="p" sx={{ ml: 8 }}>
               Not a member yet?
               <Link
-                to="/Register"
-                style={{ textDecoration: "none", color: "blue" }}
+                to="/register"
+                style={{ textDecoration: "none", color: "#0d47a1" }}
               >
                 {" "}
                 Register

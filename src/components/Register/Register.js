@@ -230,8 +230,8 @@ export default function SignIn() {
             <Typography variant="p" sx={{ ml: 8 }}>
               Already a member?
               <Link
-                to="/Login"
-                style={{ textDecoration: "none", color: "blue" }}
+                to="/login"
+                style={{ textDecoration: "none", color: "#0d47a1" }}
               >
                 {" "}
                 Login
