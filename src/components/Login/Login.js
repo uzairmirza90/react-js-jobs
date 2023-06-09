@@ -193,7 +193,7 @@ export default function SignIn() {
               Not a member yet?
               <Link
                 to="/register"
-                style={{ textDecoration: "none", color: "#0d47a1" }}
+                style={{ textDecoration: "none", color: "#1565c0" }}
               >
                 {" "}
                 Register
