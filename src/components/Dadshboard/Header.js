@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import logoImage from "../../assets/logo.jpg";
 import PropTypes from "prop-types";
@@ -23,6 +23,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { padding, width } from "@mui/system";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const defaultTheme = createTheme({
   palette: {
@@ -39,31 +41,31 @@ const Header = (props) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const setMaxWidth = useMediaQuery("(max-width:600px)");
 
   const drawer = (
     <div>
-      <Toolbar />
-      <Divider sx={{ paddingTop: "30px" }} />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
+        <Box
+          sx={{ display: "flex", alignItems: "center", mb: "30px", mt: "15px" }}
+        >
+          <img src={logoImage} alt="logoImage" width={70} />
+          <Typography
+            variant="h6"
+            sx={{
+              flexGrow: 1,
+              color: "primary.main",
+              fontWeight: "bold",
+              fontSize: "30px",
+            }}
+          >
+            JobsLand
+          </Typography>
+        </Box>
+
+        {["Stats", "All Jobs", "Add Job", "Profile"].map((text, index) => (
+          <ListItem key={text}>
+            <ListItemButton sx={{ paddingLeft: "75px" }}>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -72,96 +74,91 @@ const Header = (props) => {
     </div>
   );
 
-  // const container =
-  //   window !== undefined ? () => window().document.body : undefined;
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-      <Box sx={{ flexGrow: 1 }}>
+
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
         <AppBar
-          position="static"
+          position="fixed"
           sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignContent: "center",
             backgroundColor: "#ffffff",
-            padding: "15px",
-            boxShadow: "none",
+            paddingLeft: "150px",
+            paddingRight: "10px",
+            marginLeft: { sm: `${drawerWidth}px` },
             width: "100%",
+            height: "90px",
+            boxShadow: "none",
           }}
         >
-          <Toolbar>
-            <img src={logoImage} alt="logoImage" width={70} />
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                flexGrow: 1,
-                color: "primary.main",
-                fontWeight: "bold",
-                fontSize: "30px",
-              }}
-            >
-              JobsLand
-            </Typography>
-            <Typography
-              alignContent="center"
-              color="black"
-              sx={{ flexGrow: 1, fontSize: "27px" }}
-            >
-              Dashboard
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography
+                variant="h5"
+                noWrap
+                component="div"
+                color={setMaxWidth ? "primary.main" : "black"}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  mt: "30px",
+                }}
+              >
+                {setMaxWidth ? "JobsLand" : " Dashboard"}
+              </Typography>
+            </Box>
             <Button
               variant="contained"
               color="primary"
-              sx={{ width: "120px", height: "33px" }}
+              alignItems="center"
+              sx={{ mx: 2, mt: "28px", width: "90px", height: "30px" }}
             >
               User
             </Button>
+          </Box>
+          <Toolbar sx={{ display: "flex" }}>
+            <IconButton
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              sx={{ display: { sm: "none" } }}
+            >
+              <MenuIcon sx={{ color: "primary.main", ml: -25, mt: -10 }} />
+            </IconButton>
           </Toolbar>
         </AppBar>
-      </Box>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        {/* <AppBar
-          position="fixed"
-          sx={{
-            width: "100%",
-            ml: { sm: `${drawerWidth}px` },
-          }} */}
-        {/* > */}
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
-        </Toolbar>
-        {/* </AppBar> */}
         <Box
           component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          sx={{
+            width: { sm: drawerWidth },
+            flexShrink: { sm: 0 },
+          }}
           aria-label="mailbox folders"
         >
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Drawer
-            // container={container}
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             }}
             sx={{
               display: { xs: "block", sm: "none" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                border: "none",
               },
             }}
           >
@@ -174,6 +171,7 @@ const Header = (props) => {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                border: "none",
               },
             }}
             open
@@ -222,7 +220,6 @@ const Header = (props) => {
           </Typography>
         </Box>
       </Box>
-      ); }
     </ThemeProvider>
   );
 };
