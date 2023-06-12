@@ -84,60 +84,74 @@ const Header = (props) => {
           position="fixed"
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            alignContent: "center",
+            justifyContent: "center",
+            alignItems: "center",
             backgroundColor: "#ffffff",
-            paddingLeft: "150px",
+            paddingLeft: setMaxWidth ? "10px" : "20px",
             paddingRight: "10px",
-            marginLeft: { sm: `${drawerWidth}px` },
+            marginLeft: { xs: "0", sm: `${drawerWidth}px` },
             width: "100%",
             height: "90px",
             boxShadow: "none",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-
-              alignItems: "center",
-              height: "100%",
-            }}
+          <Toolbar
+            sx={{ display: "flex", width: "100%", paddingRight: "20px" }}
           >
-            <Box sx={{ flexGrow: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexGrow: 1,
+                justifyContent: "flex-start",
+              }}
+            >
+              <IconButton
+                edge="start"
+                aria-label="open drawer"
+                onClick={handleDrawerToggle}
+                sx={{
+                  display: { sm: "none" },
+                  color: "primary.main",
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexGrow: 1,
+                justifyContent: "space-between",
+              }}
+            >
               <Typography
                 variant="h5"
                 noWrap
                 component="div"
                 color={setMaxWidth ? "primary.main" : "black"}
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  mt: "30px",
+                  ml: setMaxWidth ? 0 : 13,
+                  fontSize: { xs: "25px", sm: "28px" },
                 }}
               >
-                {setMaxWidth ? "JobsLand" : " Dashboard"}
+                {setMaxWidth ? "JobsLand" : "Dashboard"}
               </Typography>
             </Box>
             <Button
               variant="contained"
               color="primary"
               alignItems="center"
-              sx={{ mx: 2, mt: "28px", width: "90px", height: "30px" }}
+              sx={{
+                fontSize: { xs: "13px", sm: "14px" },
+              }}
             >
               User
             </Button>
-          </Box>
-          <Toolbar sx={{ display: "flex" }}>
-            <IconButton
-              aria-label="open drawer"
-              onClick={handleDrawerToggle}
-              sx={{ display: { sm: "none" } }}
-            >
-              <MenuIcon sx={{ color: "primary.main", ml: -25, mt: -10 }} />
-            </IconButton>
           </Toolbar>
         </AppBar>
+
         <Box
           component="nav"
           sx={{
