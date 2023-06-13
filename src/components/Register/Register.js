@@ -13,8 +13,6 @@ import { useState } from "react";
 
 import { Link } from "react-router-dom";
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme({
   palette: {
     background: {
