@@ -70,7 +70,8 @@ const AddJob = function () {
             }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {" "}
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography variant="p" sx={{ marginBottom: 1 }}>
                     Position
@@ -91,7 +92,8 @@ const AddJob = function () {
                   />
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {" "}
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography variant="p" sx={{ marginBottom: 1 }}>
                     Company
@@ -111,7 +113,8 @@ const AddJob = function () {
                   />
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {" "}
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography variant="p" sx={{ marginBottom: 1 }}>
                     Job location
@@ -131,7 +134,8 @@ const AddJob = function () {
                   />
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {" "}
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography variant="p" sx={{ marginBottom: 1 }}>
                     Status
@@ -159,7 +163,8 @@ const AddJob = function () {
                   </TextField>
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {" "}
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Typography variant="p" sx={{ marginBottom: 1 }}>
                     Job Type
@@ -187,7 +192,8 @@ const AddJob = function () {
                   </TextField>
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {" "}
                 <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
                   <Button
                     variant="contained"
