@@ -26,6 +26,7 @@ import Typography from "@mui/material/Typography";
 import { padding, width } from "@mui/system";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import AddJob from "../AddJob/addJob";
+import Profile from "../Profile/profile";
 
 const defaultTheme = createTheme({
   palette: {
@@ -203,7 +204,8 @@ const Header = (props) => {
           }}
         >
           <Toolbar />
-          <AddJob />
+          {/* <AddJob /> */}
+          <Profile />
         </Box>
       </Box>
     </ThemeProvider>
