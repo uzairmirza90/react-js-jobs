@@ -9,6 +9,8 @@ import { Form } from "react-router-dom";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
+import allJobsList from "../All-Jobs/all-jobs-list";
+import AllJobList from "../All-Jobs/all-jobs-list";
 
 const defaultTheme = createTheme({
   palette: {
@@ -216,6 +218,7 @@ const AddJob = function () {
           </Box>
         </Box>
       </Container>{" "}
+      <AllJobList />
     </ThemeProvider>
   );
 };
