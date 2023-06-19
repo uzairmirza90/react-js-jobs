@@ -9,9 +9,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import logoImage from "../../assets/logo.jpg";
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../Firebase-config";
 
 const defaultTheme = createTheme({
   palette: {
@@ -31,40 +34,68 @@ export default function SignIn() {
   const [nameChange, setNameChange] = useState("");
   const [isNameValid, setIsNameValid] = useState(false);
   const [isWrongName, setIsWrongName] = useState(false);
+  const [firebaseError, setFirebaseError] = useState("");
+  let navigate = useNavigate();
+  useEffect(() => {
+    const storedUser = localStorage.getItem("jobs-land-user");
 
-  const nameChangeHandler = (event) => {
+    if (storedUser) {
+      navigate("/stats");
+    }
+  }, []);
+
+  const register = async () => {
+    try {
+      if (!isNameValid) {
+        setIsWrongName(true);
+        return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+      await updateProfile(user, {
+        displayName: nameChange,
+      });
+      console.log(user);
+      localStorage.setItem(
+        "jobs-land-user",
+        JSON.stringify({
+          email: user.email,
+          uid: user.uid,
+          name: user.displayName,
+        })
+      );
+      navigate("/stats");
+    } catch (error) {
+      console.log(error.message);
+      setFirebaseError(error.message);
+    }
+  };
+
+  const nameChangeHandler = async (event) => {
     setNameChange(event.target.value);
     setIsWrongName(false);
   };
-  const emailHandler = function (event) {
+  const emailHandler = async function (event) {
     setEmail(event.target.value);
-    setIsWrongEmail(false);
+    setFirebaseError("");
   };
-  const passHandler = (event) => {
+  const passHandler = async (event) => {
     setPassword(event.target.value);
-    setIsWrongPass(false);
+    setFirebaseError("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsWrongEmail(true);
-    setIsWrongPass(true);
-    setIsWrongName(true);
-
-    const isEmailValid =
-      /^[^A-Z]*$/.test(email.trim()) &&
-      email.trim().includes("@") &&
-      email.length !== 0;
-
-    const isPassValid =
-      password.length > 6 &&
-      /[A-Z]/.test(password) &&
-      /[!@#$%^&*]/.test(password);
 
     setIsNameValid(nameChange.trim().length > 0);
-    setIsValidEmail(isEmailValid);
-    setIsValidPass(isPassValid);
-    console.log(email, password);
+
+    await register();
   };
 
   return (
@@ -160,14 +191,18 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               onChange={emailHandler}
-              error={!isValidEmail && isWrongEmail}
+              error={
+                firebaseError &&
+                (firebaseError.includes("auth/email-already-in-use") ||
+                  firebaseError.includes("auth/invalid-email"))
+              }
               helperText={
-                isWrongEmail
-                  ? !isValidEmail
-                    ? email === ""
-                      ? "enter your email"
-                      : "Invalid Email"
-                    : ""
+                firebaseError &&
+                firebaseError.includes("auth/email-already-in-use")
+                  ? "Email already in use"
+                  : firebaseError &&
+                    firebaseError.includes("auth/invalid-email")
+                  ? "Invalid email"
                   : ""
               }
               sx={{
@@ -194,15 +229,22 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
               onChange={passHandler}
-              error={!isValidPass && isWrongPass}
+              error={
+                firebaseError &&
+                (firebaseError.includes(
+                  " Password should be at least 6 characters (auth/weak-password)"
+                ) ||
+                  firebaseError.includes("auth/missing-password"))
+              }
               helperText={
-                isWrongPass
-                  ? !isValidPass
-                    ? password === ""
-                      ? "enter your password"
-                      : "password must be greater than 6 digits and must include one capital and special character"
-                    : ""
-                  : ""
+                firebaseError &&
+                (firebaseError.includes(
+                  " Password should be at least 6 characters (auth/weak-password)"
+                )
+                  ? "Password should be at least 6 characters"
+                  : firebaseError.includes("auth/missing-password")
+                  ? "Missing Password"
+                  : "")
               }
               sx={{
                 mt: 1,
@@ -223,8 +265,9 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 5, mb: 4, textTransform: "none" }}
             >
-              Sumbit
+              Submit
             </Button>
+
             <Typography variant="p" sx={{ ml: 8 }}>
               Already a member?
               <Link

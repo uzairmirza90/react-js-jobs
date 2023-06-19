@@ -11,6 +11,8 @@ import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const defaultTheme = createTheme({
   palette: {
@@ -254,6 +256,36 @@ const AllJobList = function () {
               </Box>
             </Grid>
           </Grid>
+          <Stack
+            spacing={2}
+            direction="row"
+            sx={{
+              mt: 4,
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Pagination
+              size="large"
+              color="primary"
+              count={5}
+              variant="outlined"
+              shape="rounded"
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  fontWeight: "bold",
+                  borderColor: "primary.main", // Set border color to primary
+                  backgroundColor: "#bbdefb",
+                  color: "primary.main", // Set background color to primary
+                },
+                "& .MuiPaginationItem-root.Mui-selected": {
+                  borderColor: "primary.main ", // Set border color to primary dark when selected
+                  backgroundColor: "primary.main",
+                  color: "white", // Set background color to primary dark when selected
+                },
+              }}
+            />
+          </Stack>
         </Box>
       </Container>
     </ThemeProvider>

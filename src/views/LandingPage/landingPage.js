@@ -8,6 +8,8 @@ import { CssBaseline, Grid } from "@mui/material";
 import logoImage from "../../assets/logo.jpg";
 import landingImage from "../../assets/landingImage.jpg";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -21,6 +23,14 @@ const defaultTheme = createTheme({
 
 const LandingPage = function () {
   const isSmallScreen = useMediaQuery("(max-width:920px)");
+  let navigate = useNavigate();
+  useEffect(() => {
+    const storedUser = localStorage.getItem("jobs-land-user");
+
+    if (storedUser) {
+      navigate("/stats");
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={defaultTheme}>

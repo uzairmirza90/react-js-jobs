@@ -9,11 +9,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import logoImage from "../../assets/logo.jpg";
-import { useState } from "react";
-
+import { useState, useEffect, useLayoutEffect } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../Firebase-config";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme({
   palette: {
@@ -30,34 +30,55 @@ export default function SignIn() {
   const [isValidPass, setIsValidPass] = useState(false);
   const [isWrongEmail, setIsWrongEmail] = useState(false);
   const [isWrongPass, setIsWrongPass] = useState(false);
+  const [firebaseError, setFirebaseError] = useState("");
+  let navigate = useNavigate();
+  let location = useLocation();
+  useEffect(() => {
+    const storedUser = localStorage.getItem("jobs-land-user");
+    console.log(storedUser);
+    if (storedUser) {
+      navigate("/stats");
+    }
+  }, []);
 
-  const emailHandler = function (event) {
+  const login = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+      console.log(user);
+      localStorage.setItem(
+        "jobs-land-user",
+        JSON.stringify({
+          email: user.email,
+          uid: user.uid,
+          name: user.displayName,
+        })
+      );
+
+      navigate("/stats");
+    } catch (error) {
+      console.log(error.message);
+      setFirebaseError(error.message);
+    }
+  };
+
+  const emailHandler = async function (event) {
     setEmail(event.target.value);
-    setIsWrongEmail(false);
+    setFirebaseError("");
   };
-  const passHandler = (event) => {
+  const passHandler = async (event) => {
     setPassword(event.target.value);
-    setIsWrongPass(false);
+    setFirebaseError("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsWrongEmail(true);
-    setIsWrongPass(true);
-
-    const isEmailValid =
-      /^[^A-Z]*$/.test(email.trim()) &&
-      email.trim().includes("@") &&
-      email.length !== 0;
-
-    const isPassValid =
-      password.length > 6 &&
-      /[A-Z]/.test(password) &&
-      /[!@#$%^&*]/.test(password);
-
-    setIsValidEmail(isEmailValid);
-    setIsValidPass(isPassValid);
-    console.log(email, password);
+    await login();
   };
 
   return (
@@ -124,14 +145,18 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
               onChange={emailHandler}
-              error={!isValidEmail && isWrongEmail}
+              error={
+                firebaseError &&
+                (firebaseError.includes("auth/email-already-in-use") ||
+                  firebaseError.includes("auth/invalid-email"))
+              }
               helperText={
-                isWrongEmail
-                  ? !isValidEmail
-                    ? email === ""
-                      ? "enter your email"
-                      : "Invalid Email"
-                    : ""
+                firebaseError &&
+                firebaseError.includes("auth/email-already-in-use")
+                  ? "Email already in use"
+                  : firebaseError &&
+                    firebaseError.includes("auth/invalid-email")
+                  ? "Invalid email"
                   : ""
               }
               sx={{
@@ -153,20 +178,22 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              // label="Password"
               type="password"
               id="password"
               autoComplete="current-password"
               onChange={passHandler}
-              error={!isValidPass && isWrongPass}
+              error={
+                firebaseError &&
+                (firebaseError.includes("auth/wrong-password") ||
+                  firebaseError.includes("auth/missing-password"))
+              }
               helperText={
-                isWrongPass
-                  ? !isValidPass
-                    ? password === ""
-                      ? "enter your password"
-                      : "password must be greater than 6 digits and must include one capital and special character"
-                    : ""
-                  : ""
+                firebaseError &&
+                (firebaseError.includes("auth/wrong-password")
+                  ? "Wrong Password"
+                  : firebaseError.includes("auth/missing-password")
+                  ? "Missing Password"
+                  : "")
               }
               sx={{
                 mt: 1,
@@ -187,7 +214,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 5, mb: 4, textTransform: "none" }}
             >
-              Sumbit
+              Submit
             </Button>
             <Typography variant="p" sx={{ ml: 8 }}>
               Not a member yet?
