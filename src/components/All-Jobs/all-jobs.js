@@ -9,6 +9,9 @@ import { Form } from "react-router-dom";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
+import allJobsList from "../All-Jobs/all-jobs-list";
+import AllJobList from "../All-Jobs/all-jobs-list";
+import Layout from "../Layout/Layout";
 
 const defaultTheme = createTheme({
   palette: {
@@ -56,167 +59,170 @@ const sortOptions = [
 ];
 const AddJob = function () {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 9,
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "wrap",
-            maxWidth: "1150px",
-            backgroundColor: "#ffffff",
-            padding: "33px",
-            borderRadius: "8px",
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-            borderTop: "5px solid #1976d2",
-          }}
-        >
-          <Typography sx={{ fontSize: "25px" }}>Search Form</Typography>
+    <Layout>
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main">
+          <CssBaseline />
           <Box
             sx={{
+              marginTop: 9,
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               flexWrap: "wrap",
-              justifyContent: "space-between",
-              paddingTop: "25px",
+              maxWidth: "1150px",
+              backgroundColor: "#ffffff",
+              padding: "33px",
+              borderRadius: "8px",
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+              borderTop: "5px solid #1976d2",
             }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={4} lg={4}>
-                {" "}
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography variant="p" sx={{ marginBottom: 1 }}>
-                    Search
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      marginBottom: 1,
-                      width: "100%",
-                      "& .MuiInputBase-input": {},
-                    }}
-                    InputProps={{
-                      sx: {
-                        backgroundColor: "#f8f8ff",
-                      },
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={4}>
-                {" "}
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography variant="p" sx={{ marginBottom: 1 }}>
-                    Status
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    select
-                    defaultValue="all"
-                    size="small"
-                    sx={{
-                      width: "100%",
-                      "& .MuiInputBase-input": {},
-                    }}
-                    InputProps={{
-                      sx: {
-                        backgroundColor: "#f8f8ff",
-                      },
-                    }}
-                  >
-                    {statusOptions.map((options) => (
-                      <MenuItem key={options.value} value={options.value}>
-                        {options.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={4}>
-                {" "}
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography variant="p" sx={{ marginBottom: 1 }}>
-                    Type
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    select
-                    defaultValue="all"
-                    size="small"
-                    sx={{
-                      width: "100%",
-                      "& .MuiInputBase-input": {},
-                    }}
-                    InputProps={{
-                      sx: {
-                        backgroundColor: "#f8f8ff",
-                      },
-                    }}
-                  >
-                    {typeOptions.map((options) => (
-                      <MenuItem key={options.value} value={options.value}>
-                        {options.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={4}>
-                {" "}
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <Typography variant="p" sx={{ marginBottom: 1 }}>
-                    Sort
-                  </Typography>
-                  <TextField
-                    variant="outlined"
-                    select
-                    defaultValue="latest"
-                    size="small"
-                    sx={{
-                      width: "100%",
-                      "& .MuiInputBase-input": {},
-                    }}
-                    InputProps={{
-                      sx: {
-                        backgroundColor: "#f8f8ff",
-                      },
-                    }}
-                  >
-                    {sortOptions.map((options) => (
-                      <MenuItem key={options.value} value={options.value}>
-                        {options.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Box>
-              </Grid>
+            <Typography sx={{ fontSize: "25px" }}>Search Form</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                paddingTop: "25px",
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4} lg={4}>
+                  {" "}
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="p" sx={{ marginBottom: 1 }}>
+                      Search
+                    </Typography>
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        marginBottom: 1,
+                        width: "100%",
+                        "& .MuiInputBase-input": {},
+                      }}
+                      InputProps={{
+                        sx: {
+                          backgroundColor: "#f8f8ff",
+                        },
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={4}>
+                  {" "}
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="p" sx={{ marginBottom: 1 }}>
+                      Status
+                    </Typography>
+                    <TextField
+                      variant="outlined"
+                      select
+                      defaultValue="all"
+                      size="small"
+                      sx={{
+                        width: "100%",
+                        "& .MuiInputBase-input": {},
+                      }}
+                      InputProps={{
+                        sx: {
+                          backgroundColor: "#f8f8ff",
+                        },
+                      }}
+                    >
+                      {statusOptions.map((options) => (
+                        <MenuItem key={options.value} value={options.value}>
+                          {options.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={4}>
+                  {" "}
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="p" sx={{ marginBottom: 1 }}>
+                      Type
+                    </Typography>
+                    <TextField
+                      variant="outlined"
+                      select
+                      defaultValue="all"
+                      size="small"
+                      sx={{
+                        width: "100%",
+                        "& .MuiInputBase-input": {},
+                      }}
+                      InputProps={{
+                        sx: {
+                          backgroundColor: "#f8f8ff",
+                        },
+                      }}
+                    >
+                      {typeOptions.map((options) => (
+                        <MenuItem key={options.value} value={options.value}>
+                          {options.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={4}>
+                  {" "}
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="p" sx={{ marginBottom: 1 }}>
+                      Sort
+                    </Typography>
+                    <TextField
+                      variant="outlined"
+                      select
+                      defaultValue="latest"
+                      size="small"
+                      sx={{
+                        width: "100%",
+                        "& .MuiInputBase-input": {},
+                      }}
+                      InputProps={{
+                        sx: {
+                          backgroundColor: "#f8f8ff",
+                        },
+                      }}
+                    >
+                      {sortOptions.map((options) => (
+                        <MenuItem key={options.value} value={options.value}>
+                          {options.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+                </Grid>
 
-              <Grid item xs={12} sm={6} md={4} lg={4}>
-                {" "}
-                <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      height: "38px",
-                      width: "100%",
-                      backgroundColor: "#ef9a9a",
-                      "&:hover": {
-                        backgroundColor: "#c62828",
-                      },
-                    }}
-                  >
-                    Clear Filters
-                  </Button>
-                </Box>
+                <Grid item xs={12} sm={6} md={4} lg={4}>
+                  {" "}
+                  <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        height: "38px",
+                        width: "100%",
+                        backgroundColor: "#ef9a9a",
+                        "&:hover": {
+                          backgroundColor: "#c62828",
+                        },
+                      }}
+                    >
+                      Clear Filters
+                    </Button>
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>{" "}
-    </ThemeProvider>
+        </Container>{" "}
+        <AllJobList />
+      </ThemeProvider>
+    </Layout>
   );
 };
 export default AddJob;

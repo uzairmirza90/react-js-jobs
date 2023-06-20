@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import logoImage from "../../assets/logo.jpg";
 import PropTypes from "prop-types";
@@ -28,6 +28,14 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import AddJob from "../AddJob/addJob";
 import Profile from "../Profile/profile";
 import AllJobs from "../All-Jobs/all-jobs";
+import StatsData from "../Stats/statsData";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { auth } from "../../Firebase-config";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const defaultTheme = createTheme({
   palette: {
@@ -37,12 +45,37 @@ const defaultTheme = createTheme({
   },
 });
 const drawerWidth = 240;
-const Header = (props) => {
-  // const { window } = props;
+const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [user, setUser] = useState(null);
+  let navigate = useNavigate();
 
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("jobs-land-user"));
+    if (!storedUser) {
+      navigate("/login");
+    } else {
+      setUser(storedUser);
+    }
+  }, []);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = async () => {
+    setAnchorEl(null);
+  };
+  const menuItemHandler = async () => {
+    setAnchorEl(null);
+    localStorage.removeItem("jobs-land-user");
+
+    await signOut(auth);
+
+    navigate("/login");
   };
   const setMaxWidth = useMediaQuery("(max-width:600px)");
 
@@ -66,13 +99,42 @@ const Header = (props) => {
           </Typography>
         </Box>
 
-        {["Stats", "All Jobs", "Add Job", "Profile"].map((text, index) => (
-          <ListItem key={text}>
-            <ListItemButton sx={{ paddingLeft: "75px" }}>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem>
+          <ListItemButton
+            component={Link}
+            sx={{ paddingLeft: "75px" }}
+            to="/stats"
+          >
+            <ListItemText primary="Stats" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton
+            component={Link}
+            sx={{ paddingLeft: "75px" }}
+            to="/all-jobs"
+          >
+            <ListItemText primary="All Jobs" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton
+            component={Link}
+            sx={{ paddingLeft: "75px" }}
+            to="/add-job"
+          >
+            <ListItemText primary="Add Job" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton
+            component={Link}
+            sx={{ paddingLeft: "75px" }}
+            to="/profile"
+          >
+            <ListItemText primary="Profile" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </div>
   );
@@ -145,13 +207,20 @@ const Header = (props) => {
             <Button
               variant="contained"
               color="primary"
-              alignItems="center"
-              sx={{
-                fontSize: { xs: "13px", sm: "14px" },
-              }}
+              onClick={handleClick}
+              endIcon={<ArrowDropDownIcon />}
+              sx={{ width: "auto", fontSize: { xs: "10px", sm: "13px" } }}
             >
-              User
+              {user && user.name}
             </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem>{user && user.name}</MenuItem>
+              <MenuItem onClick={menuItemHandler}>Logout</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
 
@@ -205,12 +274,10 @@ const Header = (props) => {
           }}
         >
           <Toolbar />
-          {/* <AddJob /> */}
-          {/* <Profile /> */}
-          <AllJobs />
+          {children}
         </Box>
       </Box>
     </ThemeProvider>
   );
 };
-export default Header;
+export default Layout;
