@@ -209,9 +209,9 @@ const Layout = ({ children }) => {
               color="primary"
               onClick={handleClick}
               endIcon={<ArrowDropDownIcon />}
-              sx={{ maxWidth: "130px", fontSize: { xs: "13px", sm: "20px" } }}
+              sx={{ width: "auto", fontSize: { xs: "10px", sm: "13px" } }}
             >
-              {user && user.name && user.name.charAt(0)}
+              {user && user.name}
             </Button>
             <Menu
               anchorEl={anchorEl}
