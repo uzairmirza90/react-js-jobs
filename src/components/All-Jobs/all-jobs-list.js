@@ -65,89 +65,97 @@ const AllJobList = function () {
                     flexDirection: "column",
                   }}
                 >
-                  <Typography variant="h6" sx={{ marginBottom: 1 }}>
-                    Position
-                  </Typography>
                   <Typography
                     variant="p"
                     color="#9e9e9e"
                     sx={{ marginBottom: 1 }}
                   >
-                    Name
+                    Title
                   </Typography>
-                  <Divider style={{ width: "auto", marginBottom: 30 }} />
-                  <Box
+                  <Typography
+                    variant="h6"
+                    // color="#9e9e9e"
+                    sx={{ marginBottom: 1 }}
+                  >
+                    titleName
+                  </Typography>
+                  <Divider style={{ width: "auto", marginBottom: 10 }} />
+                  {/* <Box
                     sx={{
                       display: "flex",
 
                       flexDirection: "row",
                       justifyContent: "space-between",
                     }}
+                  > */}
+                  {/* <Grid item xs={12} sm={6} md={4} lg={4}>
+                    {" "} */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
+                    }}
                   >
-                    <Grid item xs={12} sm={6} md={4} lg={4}>
-                      {" "}
-                      <Box
+                    <Typography
+                      variant="p"
+                      color="#9e9e9e"
+                      sx={{ marginBottom: 1 }}
+                    >
+                      Description
+                    </Typography>
+                    <TextField
+                      multiline
+                      rows={4}
+                      defaultValue="Default Value"
+                      variant="standard"
+                      InputProps={{
+                        // readOnly: true,
+                        disableUnderline: true,
+                      }}
+                      sx={{
+                        "& .MuiInputBase-root": {
+                          "&::before, &::after": {
+                            borderBottom: "none",
+                          },
+                        },
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Button
+                        variant="contained"
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
+                          backgroundColor: "#81c784",
+                          "&:hover": {
+                            backgroundColor: "#4caf50",
+                          },
                         }}
                       >
-                        <Typography variant="p" sx={{ marginBottom: 1 }}>
-                          Location
-                        </Typography>
-                        <Typography variant="p" sx={{ marginBottom: 3 }}>
-                          Type
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            sx={{
-                              ml: 1,
-                              backgroundColor: "#81c784",
-                              "&:hover": {
-                                backgroundColor: "#4caf50",
-                              },
-                            }}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="contained"
-                            sx={{
-                              ml: 1,
-                              backgroundColor: "#ef9a9a",
-                              "&:hover": {
-                                backgroundColor: "#c62828",
-                              },
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </Box>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={4}>
-                      {" "}
-                      <Box
+                        Edit
+                      </Button>
+                      <Button
+                        variant="contained"
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
+                          ml: 1,
+                          backgroundColor: "#ef9a9a",
+                          "&:hover": {
+                            backgroundColor: "#c62828",
+                          },
                         }}
                       >
-                        <Typography variant="p" sx={{ marginBottom: 1 }}>
-                          Date
-                        </Typography>
-                        <Button variant="contained">Status</Button>
-                      </Box>
-                    </Grid>
+                        Delete
+                      </Button>
+                    </Box>
                   </Box>
+                  {/* </Grid> */}
                 </Box>
               </Box>
+              {/* </Box> */}
             </Grid>
             <Grid item xs={12} sm={isMobileSize ? 12 : 6} md={6}>
               {" "}
@@ -274,14 +282,14 @@ const AllJobList = function () {
               sx={{
                 "& .MuiPaginationItem-root": {
                   fontWeight: "bold",
-                  borderColor: "primary.main", // Set border color to primary
+                  borderColor: "primary.main",
                   backgroundColor: "#bbdefb",
-                  color: "primary.main", // Set background color to primary
+                  color: "primary.main",
                 },
                 "& .MuiPaginationItem-root.Mui-selected": {
-                  borderColor: "primary.main ", // Set border color to primary dark when selected
+                  borderColor: "primary.main ",
                   backgroundColor: "primary.main",
-                  color: "white", // Set background color to primary dark when selected
+                  color: "white",
                 },
               }}
             />

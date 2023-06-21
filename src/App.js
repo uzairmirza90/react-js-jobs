@@ -28,35 +28,3 @@ function App() {
 }
 
 export default App;
-
-// error={
-//   firebaseError &&
-//   (firebaseError.includes("auth/email-already-in-use") ||
-//     firebaseError.includes("auth/invalid-email"))
-// }
-// helperText={
-//   firebaseError &&
-//   firebaseError.includes("auth/email-already-in-use")
-//     ? "Email already in use"
-//     : firebaseError &&
-//       firebaseError.includes("auth/invalid-email")
-//     ? "Invalid email"
-//     : ""
-// }
-// error={
-//   firebaseError &&
-//   (firebaseError.includes(
-//     " Password should be at least 6 characters (auth/weak-password)"
-//   ) ||
-//     firebaseError.includes("auth/missing-password"))
-// }
-// helperText={
-//   firebaseError &&
-//   (firebaseError.includes(
-//     " Password should be at least 6 characters (auth/weak-password)"
-//   )
-//     ? "Password should be at least 6 characters"
-//     : firebaseError.includes("auth/missing-password")
-//     ? "Missing Password"
-//     : "")
-// }
