@@ -2,17 +2,22 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Typography } from "@mui/material";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {Typography} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Layout from "../Layout/Layout";
-import { useState, useRef } from "react";
-import { useMediaQuery } from "@mui/material";
+import {useState, useRef} from "react";
+import {useMediaQuery} from "@mui/material";
 import Menu from "@mui/material/Menu";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import {addDoc, collection} from "firebase/firestore";
+import {db} from "../../Firebase-config";
+import CircularProgress from "@mui/material/CircularProgress";
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const defaultTheme = createTheme({
   palette: {
@@ -33,10 +38,32 @@ const AddJob = function () {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [noteSubmissionLoading, setNoteSubmissionLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setNoteSubmissionLoading(true);
+    try {
+      await addDoc(collection(db, "notes"), {
+        noteTitle: title,
+        noteDescription: description,
+      })
+        .then(() => {
+          toast("Note submitted successfully!");
+          setNoteSubmissionLoading(false);
+          setTitle("");
+          setDescription("");
+        })
+        .catch((error) => {
+          setNoteSubmissionLoading(false);
+          toast("Something went wrong!");
+        });
+    } catch (error) {
+      setNoteSubmissionLoading(false);
+      console.log(error);
+    }
   };
+
   const titleHandler = (event) => {
     setTitle(event.target.value);
   };
@@ -62,6 +89,7 @@ const AddJob = function () {
 
   return (
     <Layout>
+      <ToastContainer />
       <ThemeProvider theme={defaultTheme}>
         <Container component="main">
           <CssBaseline />
@@ -91,7 +119,7 @@ const AddJob = function () {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography sx={{ fontSize: "25px" }}>Add Note</Typography>
+                  <Typography sx={{fontSize: "25px"}}>Add Note</Typography>
 
                   <Button
                     variant="contained"
@@ -100,7 +128,7 @@ const AddJob = function () {
                     endIcon={<ArrowDropDownIcon />}
                     sx={{
                       width: "auto",
-                      fontSize: { xs: "10px", sm: "13px" },
+                      fontSize: {xs: "10px", sm: "13px"},
                     }}
                   >
                     Mark
@@ -149,8 +177,8 @@ const AddJob = function () {
                     lg={12}
                   >
                     {" "}
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <Typography variant="p" sx={{ marginBottom: 1 }}>
+                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                      <Typography variant="p" sx={{marginBottom: 1}}>
                         Title*
                       </Typography>
                       <TextField
@@ -191,8 +219,8 @@ const AddJob = function () {
                     lg={12}
                   >
                     {" "}
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <Typography variant="p" sx={{ marginBottom: 1 }}>
+                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                      <Typography variant="p" sx={{marginBottom: 1}}>
                         Description
                       </Typography>
                       <TextField
@@ -217,7 +245,7 @@ const AddJob = function () {
 
                   <Grid item xs={12} sm={6} md={4} lg={4}>
                     {" "}
-                    <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
+                    <Box sx={{display: "flex", flexDirection: "row", mt: 4}}>
                       <Button
                         onClick={clearHandler}
                         variant="contained"
@@ -241,7 +269,11 @@ const AddJob = function () {
                           width: "153px",
                         }}
                       >
-                        Submit
+                        {noteSubmissionLoading ? (
+                          <CircularProgress color="inherit" size={25} />
+                        ) : (
+                          "Submit"
+                        )}
                       </Button>
                     </Box>
                   </Grid>
