@@ -114,7 +114,7 @@ const Layout = ({ children }) => {
             sx={{ paddingLeft: "75px" }}
             to="/all-jobs"
           >
-            <ListItemText primary="All Jobs" />
+            <ListItemText primary="All Notes" />
           </ListItemButton>
         </ListItem>
         <ListItem>
@@ -123,7 +123,7 @@ const Layout = ({ children }) => {
             sx={{ paddingLeft: "75px" }}
             to="/add-job"
           >
-            <ListItemText primary="Add Job" />
+            <ListItemText primary="Add Note" />
           </ListItemButton>
         </ListItem>
         <ListItem>
