@@ -18,6 +18,7 @@ import { db } from "../../Firebase-config";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { serverTimestamp } from "firebase/firestore";
 
 const defaultTheme = createTheme({
   palette: {
@@ -49,6 +50,7 @@ const AddJob = function () {
         noteTitle: title,
         noteDescription: description,
         noteType: selectedItem,
+        createdAt: serverTimestamp(),
       })
         .then(() => {
           toast("Note submitted successfully!");

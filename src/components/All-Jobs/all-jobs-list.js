@@ -13,7 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../../Firebase-config";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ToastContainer, toast } from "react-toastify";
@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { deleteDoc, doc } from "firebase/firestore";
 
 const defaultTheme = createTheme({
   palette: {
@@ -38,17 +39,17 @@ const AllJobList = function () {
   const [notesList, setNotesList] = useState([]);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const notes = collection(db, "notes");
+  const notes = query(collection(db, "notes"), orderBy("createdAt", "desc"));
 
   useEffect(() => {
     const getNotesList = async () => {
       try {
         const data = await getDocs(notes);
-        const addedNotes = data.docs.map((note) => ({
+        const notesArray = data.docs.map((note) => ({
           ...note.data(),
+          id: note.id,
         }));
-        console.log(addedNotes);
-        setNotesList(addedNotes);
+        setNotesList(notesArray);
       } catch (error) {
         console.log(error.message);
       }
@@ -63,8 +64,22 @@ const AllJobList = function () {
     setShowOverlay(false);
   };
 
+  const deleteHandler = async (noteId) => {
+    try {
+      await deleteDoc(doc(db, "notes", noteId));
+      toast("Note deleted successfully");
+      setNotesList((prevNotesList) =>
+        prevNotesList.filter((note) => note.id !== noteId)
+      );
+    } catch (error) {
+      toast("SomeThing went Wrong");
+      console.log(error.message);
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
+      <ToastContainer />
       <Container component="section">
         <CssBaseline />
 
@@ -164,18 +179,6 @@ const AllJobList = function () {
                             disableUnderline: true,
                           }}
                         />
-                        {notes.noteDescription.split("\n").length > 4 && (
-                          <Button
-                            onClick={handleSeeMore}
-                            sx={{
-                              position: "absolute",
-                              bottom: 0,
-                              right: 0,
-                            }}
-                          >
-                            See more
-                          </Button>
-                        )}
                       </Box>
                       <Dialog
                         open={showOverlay}
@@ -237,7 +240,10 @@ const AllJobList = function () {
                                     {notes.noteTitle}
                                   </Typography>
                                   <Divider
-                                    style={{ width: "auto", marginBottom: 10 }}
+                                    style={{
+                                      width: "auto",
+                                      marginBottom: 10,
+                                    }}
                                   />
                                   <Typography
                                     variant="p"
@@ -275,6 +281,7 @@ const AllJobList = function () {
                           Edit
                         </Button>
                         <Button
+                          onClick={() => deleteHandler(notes.id)}
                           variant="contained"
                           sx={{
                             ml: 1,
