@@ -107,9 +107,10 @@ const StatsData = function () {
                   Not Found!
                 </Typography>
               ) : (
-                Object.entries(noteTypeCounts).map(([type, count]) => (
+                Object.entries(noteTypeCounts).map(([type, count], index) => (
                   <Grid
                     item
+                    key={index}
                     xs={12}
                     sm={isMobileSize ? 12 : 6}
                     md={6}
@@ -175,7 +176,7 @@ const StatsData = function () {
               )}
             </Grid>
             <Box>
-              <BarChart notesList={notesList} />
+              <BarChart notesList={notesList} loadingNotes={loadingNotes} />
             </Box>
           </Box>
         </Container>
