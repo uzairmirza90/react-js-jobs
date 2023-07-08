@@ -3,15 +3,16 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Divider, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import { Form } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import MenuItem from "@mui/material/MenuItem";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import Layout from "../Layout/Layout";
+import { db } from "../../Firebase-config";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
+import { useState, useEffect, useRef } from "react";
+import BarChart from "./BarChart";
+
 const defaultTheme = createTheme({
   palette: {
     background: {
@@ -23,6 +24,47 @@ const StatsData = function () {
   const theme = useTheme();
   const isMobileSize = useMediaQuery(theme.breakpoints.down("md"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [notesList, setNotesList] = useState([]);
+
+  const [noteTypeCounts, setNoteTypeCounts] = useState({});
+  const [loadingNotes, setLoadingNotes] = useState(true);
+
+  const getNotesList = async () => {
+    try {
+      const notes = query(collection(db, "notes"));
+      const data = await getDocs(notes);
+      const notesArray = data.docs.map((note) => ({
+        ...note.data(),
+        id: note.id,
+      }));
+      setNotesList(notesArray);
+      setLoadingNotes(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getNotesList();
+  }, []);
+
+  useEffect(() => {
+    const counts = {};
+    notesList.forEach((note) => {
+      counts[note.noteType] = (counts[note.noteType] || 0) + 1;
+    });
+    setNoteTypeCounts(counts);
+  }, [notesList]);
+
+  const typeColors = {
+    Random: "#1976d2",
+    Study: "#673ab7",
+    Work: "#9c27b0",
+    Personal: "#e53935",
+    Important: "#fbc02d",
+  };
+
   return (
     <Layout>
       <ThemeProvider theme={defaultTheme}>
@@ -39,112 +81,102 @@ const StatsData = function () {
             }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={isMobileSize ? 12 : 6} md={4} lg={4}>
-                {" "}
+              {loadingNotes ? (
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    backgroundColor: "#ffffff",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    padding: "33px",
-                    marginTop: 2,
-                    borderRadius: "8px",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                    borderBottom: "5px solid #ffcc80",
+                    justifyContent: "space-around",
+                    width: "100%",
+                    p: 10,
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Typography
-                      variant="h3"
-                      sx={{ marginBottom: 3, color: "#ffcc80" }}
-                    >
-                      15
-                    </Typography>
-                    <Typography variant="h5" sx={{ marginBottom: 1 }}>
-                      Pending Applications
-                    </Typography>
-                  </Box>
+                  <CircularProgress color="inherit" size={30} />
                 </Box>
-              </Grid>
-              <Grid item xs={12} sm={isMobileSize ? 12 : 6} md={4} lg={4}>
-                {" "}
-                <Box
+              ) : notesList.length === 0 ? (
+                <Typography
+                  variant="h6"
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    backgroundColor: "#ffffff",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    padding: "33px",
-                    marginTop: 2,
-                    borderRadius: "8px",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                    borderBottom: "5px solid #3f51b5",
+                    justifyContent: "space-around",
+                    width: "100%",
+                    p: 10,
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
+                  Not Found!
+                </Typography>
+              ) : (
+                Object.entries(noteTypeCounts).map(([type, count]) => (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={isMobileSize ? 12 : 6}
+                    md={6}
+                    lg={(() => {
+                      switch (Object.keys(noteTypeCounts).length) {
+                        case 1:
+                          return 12;
+                        case 2:
+                          return 6;
+                        case 3:
+                          return 4;
+                        case 4:
+                          return 3;
+                        case 5:
+                          return 2.4;
+                        default:
+                          return "";
+                      }
+                    })()}
                   >
-                    <Typography
-                      variant="h3"
-                      sx={{ marginBottom: 3, color: "#3f51b5" }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        backgroundColor: "#ffffff",
+                        flexWrap: "wrap",
+                        justifyContent: "space-between",
+                        padding: "33px",
+                        marginTop: 2,
+                        borderRadius: "8px",
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                        borderBottom: `5px solid ${typeColors[type]}`,
+                        width:
+                          Object.keys(noteTypeCounts).length === 1
+                            ? "50%"
+                            : "auto",
+                        margin:
+                          Object.keys(noteTypeCounts).length === 1
+                            ? "0 auto"
+                            : "",
+                      }}
                     >
-                      20
-                    </Typography>
-                    <Typography variant="h5" sx={{ marginBottom: 1 }}>
-                      Interviews Scheduled
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={isMobileSize ? 12 : 6} md={4} lg={4}>
-                {" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    backgroundColor: "#ffffff",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    padding: "33px",
-                    marginTop: 2,
-                    borderRadius: "8px",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                    borderBottom: "5px solid #f44336",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Typography
-                      variant="h3"
-                      sx={{ marginBottom: 3, color: "#f44336" }}
-                    >
-                      25
-                    </Typography>
-                    <Typography variant="h5" sx={{ marginBottom: 1 }}>
-                      Jobs Declined
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Typography
+                          variant="h3"
+                          sx={{ marginBottom: 5, color: typeColors[type] }}
+                        >
+                          {count}
+                        </Typography>
+                        <Typography variant="h5" sx={{ marginBottom: 1 }}>
+                          {type}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                ))
+              )}
             </Grid>
+            <Box>
+              <BarChart notesList={notesList} />
+            </Box>
           </Box>
         </Container>
       </ThemeProvider>

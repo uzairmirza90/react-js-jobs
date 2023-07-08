@@ -71,13 +71,15 @@ const Profile = function () {
                     />
                   </Box>
                 </Grid>
+
                 <Grid item xs={12} sm={6} md={4} lg={4}>
                   {" "}
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="p" sx={{ marginBottom: 1 }}>
-                      Last Name
+                      Password
                     </Typography>
                     <TextField
+                      type="password"
                       variant="outlined"
                       size="small"
                       sx={{
@@ -90,48 +92,6 @@ const Profile = function () {
                         },
                       }}
                     />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={4}>
-                  {" "}
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Typography variant="p" sx={{ marginBottom: 1 }}>
-                      Email
-                    </Typography>
-                    <TextField
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        width: "100%",
-                        "& .MuiInputBase-input": {},
-                      }}
-                      InputProps={{
-                        sx: {
-                          backgroundColor: "#f8f8ff",
-                        },
-                      }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={4}>
-                  {" "}
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Typography variant="p" sx={{ marginBottom: 1 }}>
-                      Location
-                    </Typography>
-                    <TextField
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        width: "100%",
-                        "& .MuiInputBase-input": {},
-                      }}
-                      InputProps={{
-                        sx: {
-                          backgroundColor: "#f8f8ff",
-                        },
-                      }}
-                    ></TextField>
                   </Box>
                 </Grid>
 

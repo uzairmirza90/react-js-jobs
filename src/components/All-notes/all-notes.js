@@ -5,13 +5,12 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { Form } from "react-router-dom";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
-import allJobsList from "../All-Jobs/all-jobs-list";
-import AllJobList from "../All-Jobs/all-jobs-list";
+import AllNotesList from "./all-notes-list";
 import Layout from "../Layout/Layout";
+import { useState, useEffect } from "react";
 
 const defaultTheme = createTheme({
   palette: {
@@ -20,30 +19,21 @@ const defaultTheme = createTheme({
     },
   },
 });
-const statusOptions = [
-  { value: "all", label: "all" },
-  {
-    value: "interview",
-    label: "interview",
-  },
-  {
-    value: "declined",
-    label: "declined",
-  },
-  { value: "pending", label: "pending" },
-];
+
 const typeOptions = [
   { value: "all", label: "all" },
   {
-    value: "full-time",
-    label: "full-time",
+    value: "important",
+    label: "important",
   },
   {
-    value: "part-time",
-    label: "part-time",
+    value: "random",
+    label: "random",
   },
-  { value: "remote", label: "remote" },
-  { value: "internship", label: "internship" },
+  { value: "personal", label: "personal" },
+  { value: "study", label: "study" },
+
+  { value: "work", label: "work" },
 ];
 const sortOptions = [
   { value: "latest", label: "latest" },
@@ -51,13 +41,47 @@ const sortOptions = [
     value: "oldest",
     label: "oldest",
   },
-  {
-    value: "a-z",
-    label: "a-z",
-  },
-  { value: "z-a", label: "z-a" },
 ];
-const AddJob = function () {
+const AddNote = function () {
+  const [searchNote, setSearchNote] = useState("");
+  const [typeSearch, setTypeSearch] = useState("all");
+  const [sortSearch, setSortSearch] = useState("latest");
+  const [isSearchChanged, setIsSearchChanged] = useState(false);
+  const [isTypeChanged, setIsTypeChanged] = useState(false);
+  const [isSortChanged, setIsSortChanged] = useState(false);
+  const [clearButtonChanged, setClearButtonChanged] = useState(false);
+
+  const handleSearch = (event) => {
+    setSearchNote(event.target.value);
+    setIsSearchChanged(event.target.value !== "");
+  };
+  const typeSearchHandler = (event) => {
+    setTypeSearch(event.target.textContent);
+    setIsTypeChanged(event.target.textContent !== "all");
+  };
+  const sortSearchHandler = (event) => {
+    setSortSearch(event.target.textContent);
+    setIsSortChanged(event.target.textContent !== "latest");
+  };
+  useEffect(() => {
+    setClearButtonChanged(isSearchChanged || isTypeChanged || isSortChanged);
+  }, [isSearchChanged, isTypeChanged, isSortChanged]);
+  const clearFilterHandler = () => {
+    setSearchNote("");
+    const defaultTypeOption = typeOptions.find(
+      (option) => option.label === "all"
+    );
+    setTypeSearch(defaultTypeOption.value);
+    const defaultSortOption = sortOptions.find(
+      (option) => option.label === "latest"
+    );
+    setSortSearch(defaultSortOption.value);
+    setIsSearchChanged(false);
+    setIsTypeChanged(false);
+    setIsSortChanged(false);
+    setClearButtonChanged(false);
+  };
+
   return (
     <Layout>
       <ThemeProvider theme={defaultTheme}>
@@ -95,6 +119,9 @@ const AddJob = function () {
                       Search
                     </Typography>
                     <TextField
+                      onChange={handleSearch}
+                      value={searchNote}
+                      placeholder="Enter Title"
                       variant="outlined"
                       size="small"
                       sx={{
@@ -110,35 +137,7 @@ const AddJob = function () {
                     />
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={4}>
-                  {" "}
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Typography variant="p" sx={{ marginBottom: 1 }}>
-                      Status
-                    </Typography>
-                    <TextField
-                      variant="outlined"
-                      select
-                      defaultValue="all"
-                      size="small"
-                      sx={{
-                        width: "100%",
-                        "& .MuiInputBase-input": {},
-                      }}
-                      InputProps={{
-                        sx: {
-                          backgroundColor: "#f8f8ff",
-                        },
-                      }}
-                    >
-                      {statusOptions.map((options) => (
-                        <MenuItem key={options.value} value={options.value}>
-                          {options.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                </Grid>
+
                 <Grid item xs={12} sm={6} md={4} lg={4}>
                   {" "}
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -148,7 +147,7 @@ const AddJob = function () {
                     <TextField
                       variant="outlined"
                       select
-                      defaultValue="all"
+                      value={typeSearch}
                       size="small"
                       sx={{
                         width: "100%",
@@ -161,7 +160,11 @@ const AddJob = function () {
                       }}
                     >
                       {typeOptions.map((options) => (
-                        <MenuItem key={options.value} value={options.value}>
+                        <MenuItem
+                          onClick={typeSearchHandler}
+                          key={options.value}
+                          value={options.value}
+                        >
                           {options.label}
                         </MenuItem>
                       ))}
@@ -177,7 +180,7 @@ const AddJob = function () {
                     <TextField
                       variant="outlined"
                       select
-                      defaultValue="latest"
+                      value={sortSearch}
                       size="small"
                       sx={{
                         width: "100%",
@@ -190,7 +193,11 @@ const AddJob = function () {
                       }}
                     >
                       {sortOptions.map((options) => (
-                        <MenuItem key={options.value} value={options.value}>
+                        <MenuItem
+                          onClick={sortSearchHandler}
+                          key={options.value}
+                          value={options.value}
+                        >
                           {options.label}
                         </MenuItem>
                       ))}
@@ -202,11 +209,14 @@ const AddJob = function () {
                   {" "}
                   <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
                     <Button
+                      onClick={clearFilterHandler}
                       variant="contained"
                       sx={{
                         height: "38px",
                         width: "100%",
-                        backgroundColor: "#ef9a9a",
+                        backgroundColor: clearButtonChanged
+                          ? "#c62828"
+                          : "#ef9a9a",
                         "&:hover": {
                           backgroundColor: "#c62828",
                         },
@@ -220,9 +230,13 @@ const AddJob = function () {
             </Box>
           </Box>
         </Container>{" "}
-        <AllJobList />
+        <AllNotesList
+          searchQuery={searchNote}
+          typeFilter={typeSearch}
+          sortFilter={sortSearch}
+        />
       </ThemeProvider>
     </Layout>
   );
 };
-export default AddJob;
+export default AddNote;

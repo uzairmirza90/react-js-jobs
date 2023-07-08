@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -11,10 +11,10 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import {toast} from "react-toastify";
-import {addDoc, collection, updateDoc, doc} from "firebase/firestore";
-import {db} from "../../Firebase-config";
-import {serverTimestamp} from "firebase/firestore";
+import { toast } from "react-toastify";
+import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { db } from "../../Firebase-config";
+import { serverTimestamp } from "firebase/firestore";
 
 const NoteHandler = ({
   titleText,
@@ -35,7 +35,10 @@ const NoteHandler = ({
     editNoteData?.noteDescription || ""
   );
   const [noteSubmissionLoading, setNoteSubmissionLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("Mark");
+  const [selectedItem, setSelectedItem] = useState(
+    editNoteData?.noteType || "Random"
+  );
+
   const titleRef = useRef();
 
   const titleHandler = (event) => {
@@ -54,8 +57,21 @@ const NoteHandler = ({
   const menuItemHandler = async (event) => {
     const selectedItem = event.target.textContent;
     setSelectedItem(selectedItem);
+
     handleClose();
   };
+  const buttonColor =
+    selectedItem === "Important"
+      ? "#fbc02d"
+      : selectedItem === "Work"
+      ? "#9c27b0"
+      : selectedItem === "Study"
+      ? "#673ab7"
+      : selectedItem === "Personal"
+      ? "#e53935"
+      : selectedItem === "Random"
+      ? "primary.main"
+      : "";
 
   const handleClose = async () => {
     setAnchorEl(null);
@@ -80,9 +96,10 @@ const NoteHandler = ({
             setNoteSubmissionLoading(false);
             toast("Note Updated Successfully");
             setNoteHandler("");
+            console.log("update doc handler");
           })
           .catch((error) => {
-            console.log("Somethint went wrong");
+            console.log("Something went wrong");
             toast("Something went wrong!");
           });
       } catch (error) {
@@ -102,6 +119,7 @@ const NoteHandler = ({
             setNoteSubmissionLoading(false);
             setTitle("");
             setDescription("");
+            console.log("addd doc handler");
           })
           .catch((error) => {
             setNoteSubmissionLoading(false);
@@ -140,34 +158,38 @@ const NoteHandler = ({
               justifyContent: "space-between",
             }}
           >
-            <Typography sx={{fontSize: "25px"}}>{titleText}</Typography>
+            <Typography sx={{ fontSize: "25px" }}>{titleText}</Typography>
 
-            {noteHandler === "add" && (
-              <>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleClick}
-                  endIcon={<ArrowDropDownIcon />}
-                  sx={{
-                    width: "auto",
-                    fontSize: {xs: "10px", sm: "13px"},
-                  }}
-                >
-                  {selectedItem}
-                </Button>
+            <>
+              <Button
+                variant="contained"
+                color={"primary"}
+                onClick={handleClick}
+                endIcon={<ArrowDropDownIcon />}
+                sx={{
+                  width: "auto",
+                  fontSize: { xs: "10px", sm: "13px" },
+                  backgroundColor: buttonColor,
+                  "&:hover": {
+                    backgroundColor: buttonColor,
+                  },
+                }}
+              >
+                {selectedItem}
+              </Button>
 
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={menuItemHandler}>important</MenuItem>
-                  <MenuItem onClick={menuItemHandler}>random</MenuItem>
-                  <MenuItem onClick={menuItemHandler}>personal</MenuItem>
-                </Menu>
-              </>
-            )}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={menuItemHandler}>Important</MenuItem>
+                <MenuItem onClick={menuItemHandler}>Work</MenuItem>
+                <MenuItem onClick={menuItemHandler}>Study</MenuItem>
+                <MenuItem onClick={menuItemHandler}>Personal</MenuItem>
+                <MenuItem onClick={menuItemHandler}>Random</MenuItem>
+              </Menu>
+            </>
           </Box>
         </Grid>
       </Grid>
@@ -203,8 +225,8 @@ const NoteHandler = ({
               lg={12}
             >
               {" "}
-              <Box sx={{display: "flex", flexDirection: "column"}}>
-                <Typography variant="p" sx={{marginBottom: 1}}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography variant="p" sx={{ marginBottom: 1 }}>
                   Title*
                 </Typography>
                 <TextField
@@ -213,13 +235,15 @@ const NoteHandler = ({
                   value={title}
                   inputRef={titleRef}
                   variant="outlined"
-                  fullWidth
                   id="title-field"
                   size="small"
                   InputProps={{
                     sx: {
                       backgroundColor: "#f8f8ff",
                       fontSize: "20px",
+                    },
+                    inputProps: {
+                      maxLength: 88,
                     },
                   }}
                 />
@@ -245,8 +269,8 @@ const NoteHandler = ({
               lg={12}
             >
               {" "}
-              <Box sx={{display: "flex", flexDirection: "column"}}>
-                <Typography variant="p" sx={{marginBottom: 1}}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography variant="p" sx={{ marginBottom: 1 }}>
                   Description
                 </Typography>
                 <TextField
@@ -271,7 +295,7 @@ const NoteHandler = ({
 
             <Grid item xs={12} sm={6} md={4} lg={4}>
               {" "}
-              <Box sx={{display: "flex", flexDirection: "row", mt: 4}}>
+              <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
                 {noteHandler === "add" && (
                   <Button
                     onClick={clearHandler}
@@ -292,7 +316,9 @@ const NoteHandler = ({
 
                 {noteHandler === "edit" && (
                   <Button
-                    onClick={() => setNoteHandler("")}
+                    onClick={() => {
+                      setNoteHandler("");
+                    }}
                     variant="contained"
                     sx={{
                       mr: 6,
