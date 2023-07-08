@@ -2,32 +2,25 @@ import * as React from "react";
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState, useEffect, useLayoutEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import logoImage from "../../assets/logo.jpg";
-import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { padding, width } from "@mui/system";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import AddJob from "../AddJob/addJob";
+import AddNote from "../AddNote/addNote";
 import Profile from "../Profile/profile";
-import AllJobs from "../All-Jobs/all-jobs";
+import AllNotes from "../All-notes/all-notes";
 import StatsData from "../Stats/statsData";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -52,7 +45,7 @@ const Layout = ({ children }) => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("jobs-land-user"));
+    const storedUser = JSON.parse(localStorage.getItem("notes-land-user"));
     if (!storedUser) {
       navigate("/login");
     } else {
@@ -71,7 +64,7 @@ const Layout = ({ children }) => {
   };
   const menuItemHandler = async () => {
     setAnchorEl(null);
-    localStorage.removeItem("jobs-land-user");
+    localStorage.removeItem("notes-land-user");
 
     await signOut(auth);
 
@@ -85,7 +78,7 @@ const Layout = ({ children }) => {
         <Box
           sx={{ display: "flex", alignItems: "center", mb: "30px", mt: "15px" }}
         >
-          <img src={logoImage} alt="logoImage" width={70} />
+          <img src={logoImage} alt="logoImage" width={50} />
           <Typography
             variant="h6"
             sx={{
@@ -95,7 +88,7 @@ const Layout = ({ children }) => {
               fontSize: "30px",
             }}
           >
-            JobsLand
+            NotesLand
           </Typography>
         </Box>
 
@@ -112,7 +105,7 @@ const Layout = ({ children }) => {
           <ListItemButton
             component={Link}
             sx={{ paddingLeft: "75px" }}
-            to="/all-jobs"
+            to="/all-notes"
           >
             <ListItemText primary="All Notes" />
           </ListItemButton>
@@ -121,18 +114,9 @@ const Layout = ({ children }) => {
           <ListItemButton
             component={Link}
             sx={{ paddingLeft: "75px" }}
-            to="/add-job"
+            to="/add-note"
           >
             <ListItemText primary="Add Note" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            component={Link}
-            sx={{ paddingLeft: "75px" }}
-            to="/profile"
-          >
-            <ListItemText primary="Profile" />
           </ListItemButton>
         </ListItem>
       </List>
@@ -218,7 +202,9 @@ const Layout = ({ children }) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem>{user && user.name}</MenuItem>
+              <MenuItem component={Link} to="/profile">
+                Profile
+              </MenuItem>
               <MenuItem onClick={menuItemHandler}>Logout</MenuItem>
             </Menu>
           </Toolbar>

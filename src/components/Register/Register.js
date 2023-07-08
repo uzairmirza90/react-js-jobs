@@ -37,7 +37,7 @@ export default function SignIn() {
   const [firebaseError, setFirebaseError] = useState("");
   let navigate = useNavigate();
   useEffect(() => {
-    const storedUser = localStorage.getItem("jobs-land-user");
+    const storedUser = localStorage.getItem("notes-land-user");
 
     if (storedUser) {
       navigate("/stats");
@@ -63,7 +63,7 @@ export default function SignIn() {
       });
       console.log(user);
       localStorage.setItem(
-        "jobs-land-user",
+        "notes-land-user",
         JSON.stringify({
           email: user.email,
           uid: user.uid,
@@ -136,7 +136,7 @@ export default function SignIn() {
               color="primary"
               sx={{ fontWeight: "bold", fontSize: "28px", mt: 1, ml: -1 }}
             >
-              JobsLand
+              NotesLand
             </Typography>
           </Box>
           <Typography
