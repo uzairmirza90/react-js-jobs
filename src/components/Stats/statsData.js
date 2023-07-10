@@ -174,10 +174,17 @@ const StatsData = function () {
                   </Grid>
                 ))
               )}
+
+              <Box
+                position="relative"
+                margin="auto"
+                height="40vh"
+                width="80vw"
+                sx={{ marginTop: 5 }}
+              >
+                <BarChart notesList={notesList} loadingNotes={loadingNotes} />
+              </Box>
             </Grid>
-            <Box>
-              <BarChart notesList={notesList} loadingNotes={loadingNotes} />
-            </Box>
           </Box>
         </Container>
       </ThemeProvider>

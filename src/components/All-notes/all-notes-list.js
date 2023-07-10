@@ -11,7 +11,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { getDocs, collection, query, orderBy } from "firebase/firestore";
+import { getDocs, collection, query, orderBy, where } from "firebase/firestore";
 import { db } from "../../Firebase-config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +20,7 @@ import { deleteDoc, doc } from "firebase/firestore";
 import NoteHandler from "../notehandler/NoteHandler";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
+import { auth } from "../../Firebase-config";
 
 const defaultTheme = createTheme({
   palette: {
@@ -38,6 +39,9 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
   const [editNoteData, setEditNoteData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingNotes, setLoadingNotes] = useState(true);
+  const [isDescriptionOverflow, setDescriptionOverflow] = useState(false);
+  const textFieldRef = useRef(null);
+  const [isDescriptionFocused, setDescriptionFocused] = useState(false);
 
   const getNotesList = async () => {
     try {
@@ -52,6 +56,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
       }));
       setNotesList(notesArray);
       setLoadingNotes(false);
+      console.log(notesList);
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -91,6 +96,14 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
     setNoteHandler("edit");
     setEditNoteData(noteData);
   };
+  useEffect(() => {
+    const textFieldElement = textFieldRef.current;
+    if (textFieldElement) {
+      const isOverflow =
+        textFieldElement.scrollHeight > textFieldElement.clientHeight;
+      setDescriptionOverflow(isOverflow);
+    }
+  }, [notesList]);
 
   const notesPerPage = 10;
   const totalNotes = notesList.length;
@@ -248,30 +261,52 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             }}
                           />
                         </Box>
-                        <Tooltip
-                          title="click to expand"
-                          placement="top"
-                          enterTouchDelay={0}
-                          disableHoverListener={
-                            notes.noteTitle.toLowerCase().length <= 57
-                          }
-                          followCursor
+
+                        <Box
+                          marginBottom={1}
+                          sx={{
+                            position: "relative",
+                          }}
                         >
-                          <Typography
-                            variant="h6"
-                            multiline
-                            sx={{
-                              marginBottom: 1,
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              cursor:
-                                notes.noteTitle.length > 1 ? "pointer" : "auto",
-                            }}
+                          <Tooltip
+                            title="click to expand"
+                            placement="top"
+                            enterTouchDelay={0}
+                            disableHoverListener={
+                              !isDescriptionFocused &&
+                              notes.noteTitle.split("\n").length <= 4
+                            }
+                            followCursor
                           >
-                            {notes.noteTitle}
-                          </Typography>
-                        </Tooltip>
+                            <TextField
+                              multiline
+                              rows={1}
+                              fullWidth
+                              value={notes.noteTitle}
+                              variant="standard"
+                              InputProps={{
+                                readOnly: true,
+                                disableUnderline: true,
+                                onFocus: () => setDescriptionFocused(false),
+                                onBlur: () => setDescriptionFocused(false),
+                              }}
+                              inputProps={{
+                                style: {
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 1,
+                                  WebkitBoxOrient: "vertical",
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                  cursor:
+                                    notes.noteTitle.split("\n").length > 4
+                                      ? "pointer"
+                                      : "auto",
+                                },
+                              }}
+                            />
+                          </Tooltip>
+                        </Box>
+
                         <Divider style={{ width: "auto", marginBottom: 10 }} />
 
                         <Box
@@ -294,26 +329,44 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                               position: "relative",
                             }}
                           >
-                            <TextField
-                              multiline
-                              rows={4}
-                              fullWidth
-                              value={notes.noteDescription}
-                              variant="standard"
-                              InputProps={{
-                                readOnly: true,
-                                disableUnderline: true,
-                              }}
-                              inputProps={{
-                                style: {
-                                  display: "-webkit-box",
-                                  WebkitLineClamp: 4,
-                                  WebkitBoxOrient: "vertical",
-                                  textOverflow: "ellipsis",
-                                  overflow: "hidden",
-                                },
-                              }}
-                            />
+                            <Tooltip
+                              title="click to expand"
+                              placement="top"
+                              enterTouchDelay={0}
+                              disableHoverListener={
+                                !isDescriptionFocused &&
+                                notes.noteDescription.split("\n").length <= 4
+                              }
+                              followCursor
+                            >
+                              <TextField
+                                multiline
+                                rows={4}
+                                fullWidth
+                                value={notes.noteDescription}
+                                variant="standard"
+                                InputProps={{
+                                  readOnly: true,
+                                  disableUnderline: true,
+                                  onFocus: () => setDescriptionFocused(false),
+                                  onBlur: () => setDescriptionFocused(false),
+                                }}
+                                inputProps={{
+                                  style: {
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 4,
+                                    WebkitBoxOrient: "vertical",
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                    cursor:
+                                      notes.noteDescription.split("\n").length >
+                                      4
+                                        ? "pointer"
+                                        : "auto",
+                                  },
+                                }}
+                              />
+                            </Tooltip>
                           </Box>
 
                           <Box

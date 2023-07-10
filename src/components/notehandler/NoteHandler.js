@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../Firebase-config";
 import { serverTimestamp } from "firebase/firestore";
+import { auth } from "../../Firebase-config";
 
 const NoteHandler = ({
   titleText,
