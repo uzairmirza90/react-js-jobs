@@ -45,15 +45,21 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
 
   const getNotesList = async () => {
     try {
-      const notes = query(
-        collection(db, "notes"),
-        orderBy("createdAt", sortFilter === "oldest" ? "asc" : "desc")
-      );
-      const data = await getDocs(notes);
+      const user = auth.currentUser;
+      const notesRef = collection(db, "notes");
+      let userNotesQuery = query(notesRef, where("userId", "==", user.uid));
+
+      const data = await getDocs(userNotesQuery);
       const notesArray = data.docs.map((note) => ({
         ...note.data(),
         id: note.id,
       }));
+      if (sortFilter === "oldest") {
+        notesArray.sort((a, b) => a.createdAt - b.createdAt);
+      } else {
+        notesArray.sort((a, b) => b.createdAt - a.createdAt);
+      }
+      console.log(notesArray);
       setNotesList(notesArray);
       setLoadingNotes(false);
       console.log(notesList);
@@ -65,7 +71,16 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
   };
 
   useEffect(() => {
-    getNotesList();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        getNotesList(user.uid);
+      } else {
+        setNotesList([]);
+        setLoadingNotes(false);
+      }
+    });
+
+    return () => unsubscribe();
   }, [sortFilter]);
 
   const deleteHandler = async (noteId) => {

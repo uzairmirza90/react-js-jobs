@@ -92,6 +92,7 @@ const NoteHandler = ({
           noteDescription: description,
           noteType: selectedItem,
           createdAt: serverTimestamp(),
+          userId: auth.currentUser.uid,
         })
           .then(() => {
             setNoteSubmissionLoading(false);
@@ -114,6 +115,7 @@ const NoteHandler = ({
           noteDescription: description,
           noteType: selectedItem,
           createdAt: serverTimestamp(),
+          userId: auth.currentUser.uid,
         })
           .then(() => {
             toast("Note submitted successfully!");
