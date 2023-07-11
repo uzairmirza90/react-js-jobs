@@ -9,9 +9,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import Layout from "../Layout/Layout";
 import { db } from "../../Firebase-config";
-import { getDocs, collection, query, orderBy } from "firebase/firestore";
+import { getDocs, collection, query, orderBy, where } from "firebase/firestore";
 import { useState, useEffect, useRef } from "react";
 import BarChart from "./BarChart";
+import { auth } from "../../Firebase-config";
 
 const defaultTheme = createTheme({
   palette: {
@@ -32,8 +33,10 @@ const StatsData = function () {
 
   const getNotesList = async () => {
     try {
-      const notes = query(collection(db, "notes"));
-      const data = await getDocs(notes);
+      const user = auth.currentUser;
+      const notesRef = collection(db, "notes");
+      const userNotesQuery = query(notesRef, where("userId", "==", user.uid));
+      const data = await getDocs(userNotesQuery);
       const notesArray = data.docs.map((note) => ({
         ...note.data(),
         id: note.id,
@@ -174,10 +177,17 @@ const StatsData = function () {
                   </Grid>
                 ))
               )}
+
+              <Box
+                position="relative"
+                margin="auto"
+                height="40vh"
+                width="80vw"
+                sx={{ marginTop: 5 }}
+              >
+                <BarChart notesList={notesList} loadingNotes={loadingNotes} />
+              </Box>
             </Grid>
-            <Box>
-              <BarChart notesList={notesList} loadingNotes={loadingNotes} />
-            </Box>
           </Box>
         </Container>
       </ThemeProvider>

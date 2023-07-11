@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../Firebase-config";
 import { serverTimestamp } from "firebase/firestore";
+import { auth } from "../../Firebase-config";
 
 const NoteHandler = ({
   titleText,
@@ -91,6 +92,7 @@ const NoteHandler = ({
           noteDescription: description,
           noteType: selectedItem,
           createdAt: serverTimestamp(),
+          userId: auth.currentUser.uid,
         })
           .then(() => {
             setNoteSubmissionLoading(false);
@@ -113,6 +115,7 @@ const NoteHandler = ({
           noteDescription: description,
           noteType: selectedItem,
           createdAt: serverTimestamp(),
+          userId: auth.currentUser.uid,
         })
           .then(() => {
             toast("Note submitted successfully!");
