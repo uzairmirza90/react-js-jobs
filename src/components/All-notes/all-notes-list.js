@@ -289,7 +289,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             enterTouchDelay={0}
                             disableHoverListener={
                               !isDescriptionFocused &&
-                              notes.noteTitle.split("\n").length <= 4
+                              notes.noteTitle.split("\n").length <= 1
                             }
                             followCursor
                           >
