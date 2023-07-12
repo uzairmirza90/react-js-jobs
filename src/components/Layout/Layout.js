@@ -18,10 +18,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import AddNote from "../AddNote/addNote";
-import Profile from "../Profile/profile";
-import AllNotes from "../All-notes/all-notes";
-import StatsData from "../Stats/statsData";
+
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -29,6 +26,7 @@ import { auth } from "../../Firebase-config";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { AppContext } from "../../context/context";
 
 const defaultTheme = createTheme({
   palette: {
@@ -41,7 +39,8 @@ const drawerWidth = 240;
 const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
+  const { refetchName, setRefetchName } = React.useContext(AppContext);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -50,8 +49,10 @@ const Layout = ({ children }) => {
       navigate("/login");
     } else {
       setUser(storedUser);
+      setRefetchName(false);
     }
-  }, []);
+  }, [refetchName]);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
