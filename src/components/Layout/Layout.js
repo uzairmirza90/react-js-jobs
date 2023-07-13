@@ -24,7 +24,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { auth } from "../../Firebase-config";
 import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../context/context";
 
@@ -40,8 +40,11 @@ const Layout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [user, setUser] = useState("");
+  const [activeButton, setActiveButton] = useState(null);
+
   const { refetchName, setRefetchName } = React.useContext(AppContext);
   let navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("notes-land-user"));
@@ -62,6 +65,9 @@ const Layout = ({ children }) => {
 
   const handleClose = async () => {
     setAnchorEl(null);
+  };
+  const isButtonActive = (path) => {
+    return location.pathname === path;
   };
   const menuItemHandler = async () => {
     setAnchorEl(null);
@@ -96,8 +102,17 @@ const Layout = ({ children }) => {
         <ListItem>
           <ListItemButton
             component={Link}
-            sx={{ paddingLeft: "75px" }}
             to="/stats"
+            sx={{
+              paddingLeft: "75px",
+              backgroundColor: isButtonActive("/stats")
+                ? "#f8f8ff"
+                : "transparent",
+              "&:hover": {
+                backgroundColor: "#f8f8ff",
+              },
+            }}
+            // ...
           >
             <ListItemText primary="Stats" />
           </ListItemButton>
@@ -105,8 +120,17 @@ const Layout = ({ children }) => {
         <ListItem>
           <ListItemButton
             component={Link}
-            sx={{ paddingLeft: "75px" }}
             to="/all-notes"
+            sx={{
+              paddingLeft: "75px",
+              backgroundColor: isButtonActive("/all-notes")
+                ? "#f8f8ff"
+                : "transparent",
+              "&:hover": {
+                backgroundColor: "#f8f8ff",
+              },
+            }}
+            // ...
           >
             <ListItemText primary="All Notes" />
           </ListItemButton>
@@ -114,8 +138,17 @@ const Layout = ({ children }) => {
         <ListItem>
           <ListItemButton
             component={Link}
-            sx={{ paddingLeft: "75px" }}
             to="/add-note"
+            sx={{
+              paddingLeft: "75px",
+              backgroundColor: isButtonActive("/add-note")
+                ? "#f8f8ff"
+                : "transparent",
+              "&:hover": {
+                backgroundColor: "#f8f8ff",
+              },
+            }}
+            // ...
           >
             <ListItemText primary="Add Note" />
           </ListItemButton>
