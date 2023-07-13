@@ -11,7 +11,8 @@ import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Layout from "../Layout/Layout";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   getAuth,
@@ -44,7 +45,6 @@ const Profile = function () {
 
   const handleNameChange = (event) => {
     setUpdatedName(event.target.value);
-    setNameError("");
   };
   const handleCurrentPassword = (event) => {
     setCurrentPassword(event.target.value);
@@ -83,11 +83,13 @@ const Profile = function () {
               updatePassword(user, updatedPassword)
                 .then(() => {
                   console.log("Password updated successfully!");
+                  toast("Password updated successfully");
                   setUpdatedPassword("");
                   setCurrentPassword("");
                 })
                 .catch((error) => {
                   console.log("Error updating password:", error);
+                  toast("Error updating password");
                   setFirebaseError(error.message);
                 });
             }
@@ -113,11 +115,13 @@ const Profile = function () {
           );
           setRefetchName(true);
           console.log("name updated successfully");
+          toast("Name updated successfully");
 
           setUpdatedName("");
         })
         .catch((error) => {
           console.log("Error updating name:", error);
+          toast("Error updating name");
         });
     }
   };
@@ -125,6 +129,7 @@ const Profile = function () {
   return (
     <Layout>
       <ThemeProvider theme={defaultTheme}>
+        <ToastContainer />
         <Container component="main">
           <CssBaseline />
           <Box
