@@ -59,10 +59,8 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
       } else {
         notesArray.sort((a, b) => b.createdAt - a.createdAt);
       }
-      console.log(notesArray);
       setNotesList(notesArray);
       setLoadingNotes(false);
-      console.log(notesList);
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -107,18 +105,10 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
     }
   };
 
-  const editNoteHandler = async (noteData) => {
+  const editNoteHandler = (noteData) => {
     setNoteHandler("edit");
     setEditNoteData(noteData);
   };
-  useEffect(() => {
-    const textFieldElement = textFieldRef.current;
-    if (textFieldElement) {
-      const isOverflow =
-        textFieldElement.scrollHeight > textFieldElement.clientHeight;
-      setDescriptionOverflow(isOverflow);
-    }
-  }, [notesList]);
 
   const notesPerPage = 10;
   const totalNotes = notesList.length;
@@ -153,12 +143,10 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
       (typeFilter.toLowerCase() === "all" ||
         note.noteType.toLowerCase() === typeFilter.toLowerCase())
   );
-  console.log(filteredNotes);
 
   const startIndex = (currentPage - 1) * notesPerPage;
   const endIndex = startIndex + notesPerPage;
   const paginatedNotes = filteredNotes.slice(startIndex, endIndex);
-  console.log(paginatedNotes);
 
   const formatDate = paginatedNotes.map((note) => {
     const timestamp = note.createdAt;
@@ -188,6 +176,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
             setNoteHandler={setNoteHandler}
             editNoteData={editNoteData}
             setEditNoteData={setEditNoteData}
+            onUpdate={getNotesList}
           />
         ) : (
           <Box
