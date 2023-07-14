@@ -288,6 +288,11 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                               fullWidth
                               value={notes.noteTitle}
                               variant="standard"
+                              onClick={
+                                notes.noteTitle.split("\n").length > 1
+                                  ? () => editNoteHandler(notes)
+                                  : ""
+                              }
                               InputProps={{
                                 readOnly: true,
                                 disableUnderline: true,
@@ -302,7 +307,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                   textOverflow: "ellipsis",
                                   overflow: "hidden",
                                   cursor:
-                                    notes.noteTitle.split("\n").length > 4
+                                    notes.noteTitle.split("\n").length > 1
                                       ? "pointer"
                                       : "auto",
                                 },
@@ -349,6 +354,11 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                 fullWidth
                                 value={notes.noteDescription}
                                 variant="standard"
+                                onClick={
+                                  notes.noteDescription.split("\n").length > 4
+                                    ? () => editNoteHandler(notes)
+                                    : ""
+                                }
                                 InputProps={{
                                   readOnly: true,
                                   disableUnderline: true,

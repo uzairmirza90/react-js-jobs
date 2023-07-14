@@ -235,6 +235,11 @@ const Layout = ({ children }) => {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              PaperProps={{
+                style: {
+                  width: anchorEl ? anchorEl.clientWidth : undefined,
+                },
+              }}
             >
               <MenuItem component={Link} to="/profile">
                 Profile

@@ -52,9 +52,9 @@ const LandingPage = function () {
                   variant="h3"
                   component="h1"
                   color="primary"
-                  sx={{ fontWeight: "bold", fontSize: "32px", mt: 2, ml: -1 }}
+                  sx={{ fontWeight: "bold", fontSize: "32px", mt: 2 }}
                 >
-                  JobsLand
+                  NotesLand
                 </Typography>
               </Box>
               <Box
@@ -73,8 +73,8 @@ const LandingPage = function () {
                     fontSize: "48px",
                   }}
                 >
-                  <span style={{ color: "black" }}>Job </span>
-                  Tracking
+                  <span style={{ color: "black" }}>Note </span>
+                  Taking
                   <span style={{ color: "black" }}> App </span>
                 </Typography>
               </Box>
@@ -86,8 +86,8 @@ const LandingPage = function () {
                 }}
               >
                 <Typography variant="p">
-                  This is our job tracking app, you can search for your kind of
-                  job here and post for a job as well.
+                  This is our note taking app, you can add or delete your note
+                  here and catagorise your notes as well.
                 </Typography>
               </Box>
               <Box
