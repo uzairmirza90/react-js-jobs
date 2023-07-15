@@ -22,6 +22,7 @@ const NoteHandler = ({
   noteHandler,
   setNoteHandler,
   editNoteData,
+  onUpdate,
 }) => {
   const maxWidth750 = useMediaQuery("(max-width:750px)");
   const maxWidth715 = useMediaQuery("(max-width:715px)");
@@ -95,6 +96,7 @@ const NoteHandler = ({
           userId: auth.currentUser.uid,
         })
           .then(() => {
+            onUpdate();
             setNoteSubmissionLoading(false);
             toast("Note Updated Successfully");
             setNoteHandler("");

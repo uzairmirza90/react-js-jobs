@@ -8,11 +8,10 @@ import TextField from "@mui/material/TextField";
 import { Form } from "react-router-dom";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import MenuItem from "@mui/material/MenuItem";
 import Layout from "../Layout/Layout";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../../Firebase-config";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   getAuth,
@@ -20,10 +19,8 @@ import {
   updatePassword,
   reauthenticateWithCredential,
   EmailAuthProvider,
-  deleteUser,
 } from "firebase/auth";
 import { AppContext } from "../../context/context";
-import { FirebaseError } from "@firebase/util";
 
 const defaultTheme = createTheme({
   palette: {
@@ -37,16 +34,16 @@ const Profile = function () {
   const [updatedPassword, setUpdatedPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [firebaseError, setFirebaseError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
 
   const { setRefetchName } = React.useContext(AppContext);
-  let navigate = useNavigate();
 
   const auth = getAuth();
   const user = auth.currentUser;
 
   const handleNameChange = (event) => {
     setUpdatedName(event.target.value);
-    setFirebaseError("");
   };
   const handleCurrentPassword = (event) => {
     setCurrentPassword(event.target.value);
@@ -56,6 +53,7 @@ const Profile = function () {
   const handlePasswordChange = (event) => {
     setUpdatedPassword(event.target.value);
     setFirebaseError("");
+    setNewPasswordError("");
   };
 
   const handleSaveChanges = () => {
@@ -64,59 +62,73 @@ const Profile = function () {
         user.email,
         currentPassword
       );
+      let isReauthenticationSuccessful = false;
+
       reauthenticateWithCredential(user, credential)
         .then(() => {
-          console.log("re auth successfull");
-          if (updatedPassword) {
-            updatePassword(user, updatedPassword)
-              .then(() => {
-                console.log("Password updated successfully!");
-
-                if (updatedName) {
-                  updateProfile(auth.currentUser, {
-                    displayName: updatedName,
-                  })
-                    .then(() => {
-                      localStorage.setItem(
-                        "notes-land-user",
-                        JSON.stringify({
-                          name: updatedName,
-                          email: user.email,
-                          uid: user.uid,
-                        })
-                      );
-                      setRefetchName(true);
-                      console.log("name updated successfully");
-                      setUpdatedName("");
-                      setUpdatedPassword("");
-                      setCurrentPassword("");
-                    })
-                    .catch((error) => {
-                      console.log("Error updating name:", error);
-                    });
-                }
-              })
-              .catch((error) => {
-                console.log("Error updating password:", error);
-                setFirebaseError(error.message);
-              });
+          if (!updatedPassword) {
+            setNewPasswordError("enter your new password");
           }
+          console.log("Re-authentication successful!");
+          isReauthenticationSuccessful = true;
         })
         .catch((error) => {
           console.log("Error re-authenticating user:", error);
           setFirebaseError(error.message);
+        })
+        .finally(() => {
+          if (isReauthenticationSuccessful) {
+            if (updatedPassword) {
+              updatePassword(user, updatedPassword)
+                .then(() => {
+                  console.log("Password updated successfully!");
+                  toast("Password updated successfully");
+                  setUpdatedPassword("");
+                  setCurrentPassword("");
+                })
+                .catch((error) => {
+                  console.log("Error updating password:", error);
+                  toast("Error updating password");
+                  setFirebaseError(error.message);
+                });
+            }
+          }
         });
-    } else {
-      console.log("Please enter the current password for re-authentication.");
-      setFirebaseError(
-        "Please enter the current password for re-authentication."
-      );
+    } else if (updatedPassword) {
+      console.log("Please enter the current password first");
+      setNewPasswordError("Please enter the current password first");
+    }
+
+    if (updatedName) {
+      updateProfile(auth.currentUser, {
+        displayName: updatedName,
+      })
+        .then(() => {
+          localStorage.setItem(
+            "notes-land-user",
+            JSON.stringify({
+              name: updatedName,
+              email: user.email,
+              uid: user.uid,
+            })
+          );
+          setRefetchName(true);
+          console.log("name updated successfully");
+          toast("Name updated successfully");
+
+          setUpdatedName("");
+        })
+        .catch((error) => {
+          console.log("Error updating name:", error);
+          toast("Error updating name");
+        });
     }
   };
 
   return (
     <Layout>
       <ThemeProvider theme={defaultTheme}>
+        <ToastContainer />
         <Container component="main">
           <CssBaseline />
           <Box
@@ -155,20 +167,6 @@ const Profile = function () {
                       size="small"
                       onChange={handleNameChange}
                       value={updatedName}
-                      error={
-                        firebaseError &&
-                        firebaseError.includes(
-                          "Please enter the current password for re-authentication."
-                        )
-                      }
-                      helperText={
-                        firebaseError &&
-                        firebaseError.includes(
-                          "Please enter the current password for re-authentication."
-                        )
-                          ? "Enter your current password to change your  name"
-                          : ""
-                      }
                       sx={{
                         marginBottom: 1,
                         width: "100%",
@@ -229,13 +227,25 @@ const Profile = function () {
                       onChange={handlePasswordChange}
                       value={updatedPassword}
                       error={
-                        firebaseError &&
-                        firebaseError.includes("auth/weak-password")
+                        (firebaseError &&
+                          firebaseError.includes("auth/weak-password")) ||
+                        newPasswordError.includes(
+                          "Please enter the current password first"
+                        ) ||
+                        newPasswordError.includes("enter your new password")
                       }
                       helperText={
                         firebaseError &&
                         firebaseError.includes("auth/weak-password")
                           ? "Password should be atleast 6 characters"
+                          : newPasswordError &&
+                            newPasswordError.includes(
+                              "Please enter the current password first"
+                            )
+                          ? "Please enter the current password first"
+                          : newPasswordError &&
+                            newPasswordError.includes("enter your new password")
+                          ? "Please enter your new password"
                           : ""
                       }
                       size="small"
