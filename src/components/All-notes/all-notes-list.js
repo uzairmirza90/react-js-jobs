@@ -204,7 +204,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                 maxWidth: "1150px",
               }}
             >
-              <Typography sx={{fontWeight: "bold", fontSize: "25px"}}>
+              <Typography sx={{ fontWeight: "bold", fontSize: "25px" }}>
                 List {notesList.length === 0 ? "" : notesList.length}
               </Typography>
 
@@ -269,7 +269,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             <Typography
                               variant="p"
                               color="#9e9e9e"
-                              sx={{marginBottom: 1}}
+                              sx={{ marginBottom: 1 }}
                             >
                               Title
                             </Typography>
@@ -288,51 +288,31 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                               position: "relative",
                             }}
                           >
-                            <Tooltip
-                              title="click to expand"
-                              placement="top"
-                              enterTouchDelay={0}
-                              disableHoverListener={
-                                !isDescriptionFocused &&
-                                notes.noteTitle.split("\n").length <= 1
-                              }
-                              followCursor
-                            >
-                              <TextField
-                                multiline
-                                rows={1}
-                                fullWidth
-                                value={notes.noteTitle}
-                                variant="standard"
-                                onClick={
-                                  notes.noteTitle.split("\n").length > 1
-                                    ? () => editNoteHandler(notes)
-                                    : ""
-                                }
-                                InputProps={{
-                                  readOnly: true,
-                                  disableUnderline: true,
-                                  onFocus: () => setDescriptionFocused(false),
-                                  onBlur: () => setDescriptionFocused(false),
-                                }}
-                                inputProps={{
-                                  style: {
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 1,
-                                    WebkitBoxOrient: "vertical",
-                                    textOverflow: "ellipsis",
-                                    overflow: "hidden",
-                                    cursor:
-                                      notes.noteTitle.split("\n").length > 1
-                                        ? "pointer"
-                                        : "auto",
-                                  },
-                                }}
-                              />
-                            </Tooltip>
+                            <TextField
+                              multiline
+                              rows={1}
+                              fullWidth
+                              value={notes.noteTitle}
+                              variant="standard"
+                              InputProps={{
+                                readOnly: true,
+                                disableUnderline: true,
+                              }}
+                              inputProps={{
+                                style: {
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 1,
+                                  WebkitBoxOrient: "vertical",
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                },
+                              }}
+                            />
                           </Box>
 
-                          <Divider style={{ width: "auto", marginBottom: 10 }} />
+                          <Divider
+                            style={{ width: "auto", marginBottom: 10 }}
+                          />
 
                           <Box
                             sx={{
@@ -344,7 +324,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             <Typography
                               variant="p"
                               color="#9e9e9e"
-                              sx={{marginBottom: 1}}
+                              sx={{ marginBottom: 1 }}
                             >
                               Description
                             </Typography>
@@ -354,63 +334,40 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                 position: "relative",
                               }}
                             >
-                              <Tooltip
-                                title="click to expand"
-                                placement="top"
-                                enterTouchDelay={0}
-                                disableHoverListener={
-                                  !isDescriptionFocused &&
-                                  notes.noteDescription.split("\n").length <= 4
-                                }
-                                followCursor
-                              >
-                                <TextField
-                                  multiline
-                                  rows={4}
-                                  fullWidth
-                                  value={notes.noteDescription}
-                                  variant="standard"
-                                  onClick={
-                                    notes.noteDescription.split("\n").length > 4
-                                      ? () => editNoteHandler(notes)
-                                      : ""
+                              <TextField
+                                multiline
+                                rows={4}
+                                fullWidth
+                                value={notes.noteDescription}
+                                variant="standard"
+                                InputProps={{
+                                  readOnly: true,
+                                  disableUnderline: true,
+                                }}
+                                inputProps={{
+                                  style: {
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 4,
+                                    WebkitBoxOrient: "vertical",
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                  },
+                                }}
+                              />
+                              {notes.noteDescription.length > 180 && (
+                                <button
+                                  style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: "#1976d2",
+                                  }}
+                                  onClick={() =>
+                                    editNoteHandler(notes, "see-more")
                                   }
-                                  InputProps={{
-                                    readOnly: true,
-                                    disableUnderline: true,
-                                    onFocus: () => setDescriptionFocused(false),
-                                    onBlur: () => setDescriptionFocused(false),
-                                  }}
-                                  inputProps={{
-                                    style: {
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 4,
-                                      WebkitBoxOrient: "vertical",
-                                      textOverflow: "ellipsis",
-                                      overflow: "hidden",
-                                      cursor:
-                                        notes.noteDescription.split("\n")
-                                          .length > 4
-                                          ? "pointer"
-                                          : "auto",
-                                    },
-                                  }}
-                                />
-                                {notes.noteDescription.length > 180 && (
-                                  <button
-                                    style={{
-                                      background: "none",
-                                      border: "none",
-                                      color: "#1976d2",
-                                    }}
-                                    onClick={() =>
-                                      editNoteHandler(notes, "see-more")
-                                    }
-                                  >
-                                    See more
-                                  </button>
-                                )}
-                              </Tooltip>
+                                >
+                                  See more
+                                </button>
+                              )}
                             </Box>
 
                             <Box
@@ -420,7 +377,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                 alignItems: "center",
                               }}
                             >
-                              <Box sx={{display: "flex", gap: 1}}>
+                              <Box sx={{ display: "flex", gap: 1 }}>
                                 <Button
                                   variant="contained"
                                   sx={{
@@ -454,7 +411,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                   )}
                                 </Button>
                               </Box>
-                              <Box sx={{marginLeft: "auto"}}>
+                              <Box sx={{ marginLeft: "auto" }}>
                                 <Typography key={notes.id} color="#9e9e9e">
                                   {
                                     formatDate.find(
