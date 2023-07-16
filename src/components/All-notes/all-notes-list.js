@@ -105,9 +105,14 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
     }
   };
 
-  const editNoteHandler = (noteData) => {
-    setNoteHandler("edit");
-    setEditNoteData(noteData);
+  const editNoteHandler = (noteData, type) => {
+    if (type && type === "see-more") {
+      setNoteHandler(type);
+      setEditNoteData(noteData);
+    } else {
+      setNoteHandler("edit");
+      setEditNoteData(noteData);
+    }
   };
 
   const notesPerPage = 10;
@@ -168,6 +173,16 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
       <ToastContainer />
       <Container component="section">
         <CssBaseline />
+        {noteHandler === "see-more" && (
+          <NoteHandler
+            titleText={"Note Details"}
+            noteHandler={noteHandler}
+            setNoteHandler={setNoteHandler}
+            editNoteData={editNoteData}
+            setEditNoteData={setEditNoteData}
+            onUpdate={getNotesList}
+          />
+        )}
 
         {noteHandler === "edit" ? (
           <NoteHandler
@@ -179,159 +194,94 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
             onUpdate={getNotesList}
           />
         ) : (
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              flexWrap: "wrap",
-              maxWidth: "1150px",
-            }}
-          >
-            <Typography sx={{ fontWeight: "bold", fontSize: "25px" }}>
-              List {notesList.length === 0 ? "" : notesList.length}
-            </Typography>
+          noteHandler !== "see-more" && (
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                flexWrap: "wrap",
+                maxWidth: "1150px",
+              }}
+            >
+              <Typography sx={{fontWeight: "bold", fontSize: "25px"}}>
+                List {notesList.length === 0 ? "" : notesList.length}
+              </Typography>
 
-            <Grid container spacing={2}>
-              {loadingNotes ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    width: "100%",
-                    p: 10,
-                  }}
-                >
-                  <CircularProgress color="inherit" size={30} />
-                </Box>
-              ) : notesList.length === 0 ? (
-                <Typography
-                  variant="h6"
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    width: "100%",
-                    p: 10,
-                  }}
-                >
-                  Not Found!
-                </Typography>
-              ) : (
-                paginatedNotes.map((notes) => (
-                  <Grid item xs={12} sm={isMobileSize ? 12 : 6} md={6}>
-                    {" "}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        backgroundColor: "#ffffff",
-                        flexWrap: "wrap",
-                        justifyContent: "space-between",
-                        padding: "33px",
-                        marginTop: 2,
-                        borderRadius: "8px",
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-                      }}
-                    >
+              <Grid container spacing={2}>
+                {loadingNotes ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                      width: "100%",
+                      p: 10,
+                    }}
+                  >
+                    <CircularProgress color="inherit" size={30} />
+                  </Box>
+                ) : notesList.length === 0 ? (
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                      width: "100%",
+                      p: 10,
+                    }}
+                  >
+                    Not Found!
+                  </Typography>
+                ) : (
+                  paginatedNotes.map((notes) => (
+                    <Grid item xs={12} sm={isMobileSize ? 12 : 6} md={6}>
+                      {" "}
                       <Box
                         sx={{
-                          width: "100%",
                           display: "flex",
-                          flexDirection: "column",
+                          flexDirection: "row",
+                          backgroundColor: "#ffffff",
+                          flexWrap: "wrap",
+                          justifyContent: "space-between",
+                          padding: "33px",
+                          marginTop: 2,
+                          borderRadius: "8px",
+                          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                         }}
                       >
                         <Box
                           sx={{
                             width: "100%",
                             display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
+                            flexDirection: "column",
                           }}
                         >
-                          <Typography
-                            variant="p"
-                            color="#9e9e9e"
-                            sx={{ marginBottom: 1 }}
-                          >
-                            Title
-                          </Typography>
-                          <Chip
-                            label={notes.noteType}
+                          <Box
                             sx={{
-                              backgroundColor: buttonColor(notes.noteType),
-                              color: "white",
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
                             }}
-                          />
-                        </Box>
-
-                        <Box
-                          marginBottom={1}
-                          sx={{
-                            position: "relative",
-                          }}
-                        >
-                          <Tooltip
-                            title="click to expand"
-                            placement="top"
-                            enterTouchDelay={0}
-                            disableHoverListener={
-                              !isDescriptionFocused &&
-                              notes.noteTitle.split("\n").length <= 1
-                            }
-                            followCursor
                           >
-                            <TextField
-                              multiline
-                              rows={1}
-                              fullWidth
-                              value={notes.noteTitle}
-                              variant="standard"
-                              onClick={
-                                notes.noteTitle.split("\n").length > 1
-                                  ? () => editNoteHandler(notes)
-                                  : ""
-                              }
-                              InputProps={{
-                                readOnly: true,
-                                disableUnderline: true,
-                                onFocus: () => setDescriptionFocused(false),
-                                onBlur: () => setDescriptionFocused(false),
-                              }}
-                              inputProps={{
-                                style: {
-                                  display: "-webkit-box",
-                                  WebkitLineClamp: 1,
-                                  WebkitBoxOrient: "vertical",
-                                  textOverflow: "ellipsis",
-                                  overflow: "hidden",
-                                  cursor:
-                                    notes.noteTitle.split("\n").length > 1
-                                      ? "pointer"
-                                      : "auto",
-                                },
+                            <Typography
+                              variant="p"
+                              color="#9e9e9e"
+                              sx={{marginBottom: 1}}
+                            >
+                              Title
+                            </Typography>
+                            <Chip
+                              label={notes.noteType}
+                              sx={{
+                                backgroundColor: buttonColor(notes.noteType),
+                                color: "white",
                               }}
                             />
-                          </Tooltip>
-                        </Box>
+                          </Box>
 
-                        <Divider style={{ width: "auto", marginBottom: 10 }} />
-
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            width: "100%",
-                          }}
-                        >
-                          <Typography
-                            variant="p"
-                            color="#9e9e9e"
-                            sx={{ marginBottom: 1 }}
-                          >
-                            Description
-                          </Typography>
                           <Box
                             marginBottom={1}
                             sx={{
@@ -344,18 +294,18 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                               enterTouchDelay={0}
                               disableHoverListener={
                                 !isDescriptionFocused &&
-                                notes.noteDescription.split("\n").length <= 4
+                                notes.noteTitle.split("\n").length <= 1
                               }
                               followCursor
                             >
                               <TextField
                                 multiline
-                                rows={4}
+                                rows={1}
                                 fullWidth
-                                value={notes.noteDescription}
+                                value={notes.noteTitle}
                                 variant="standard"
                                 onClick={
-                                  notes.noteDescription.split("\n").length > 4
+                                  notes.noteTitle.split("\n").length > 1
                                     ? () => editNoteHandler(notes)
                                     : ""
                                 }
@@ -368,13 +318,12 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                 inputProps={{
                                   style: {
                                     display: "-webkit-box",
-                                    WebkitLineClamp: 4,
+                                    WebkitLineClamp: 1,
                                     WebkitBoxOrient: "vertical",
                                     textOverflow: "ellipsis",
                                     overflow: "hidden",
                                     cursor:
-                                      notes.noteDescription.split("\n").length >
-                                      4
+                                      notes.noteTitle.split("\n").length > 1
                                         ? "pointer"
                                         : "auto",
                                   },
@@ -383,96 +332,181 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             </Tooltip>
                           </Box>
 
+                          <Divider style={{ width: "auto", marginBottom: 10 }} />
+
                           <Box
                             sx={{
                               display: "flex",
-                              flexDirection: "row",
-                              alignItems: "center",
+                              flexDirection: "column",
+                              width: "100%",
                             }}
                           >
-                            <Box sx={{ display: "flex", gap: 1 }}>
-                              <Button
-                                variant="contained"
-                                sx={{
-                                  backgroundColor: "#81c784",
-                                  "&:hover": {
-                                    backgroundColor: "#4caf50",
-                                  },
-                                }}
-                                onClick={() => editNoteHandler(notes)}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                onClick={() => deleteHandler(notes.id)}
-                                variant="contained"
-                                sx={{
-                                  backgroundColor: "#ef9a9a",
-                                  "&:hover": {
-                                    backgroundColor: "#c62828",
-                                  },
-                                }}
-                                disabled={notes.deleting}
-                              >
-                                {notes.deleting ? (
-                                  <CircularProgress color="inherit" size={25} />
-                                ) : (
-                                  "Delete"
-                                )}
-                              </Button>
-                            </Box>
-                            <Box sx={{ marginLeft: "auto" }}>
-                              <Typography key={notes.id} color="#9e9e9e">
-                                {
-                                  formatDate.find(
-                                    (date) => date.id === notes.id
-                                  )?.createdAt
+                            <Typography
+                              variant="p"
+                              color="#9e9e9e"
+                              sx={{marginBottom: 1}}
+                            >
+                              Description
+                            </Typography>
+                            <Box
+                              marginBottom={1}
+                              sx={{
+                                position: "relative",
+                              }}
+                            >
+                              <Tooltip
+                                title="click to expand"
+                                placement="top"
+                                enterTouchDelay={0}
+                                disableHoverListener={
+                                  !isDescriptionFocused &&
+                                  notes.noteDescription.split("\n").length <= 4
                                 }
-                              </Typography>
+                                followCursor
+                              >
+                                <TextField
+                                  multiline
+                                  rows={4}
+                                  fullWidth
+                                  value={notes.noteDescription}
+                                  variant="standard"
+                                  onClick={
+                                    notes.noteDescription.split("\n").length > 4
+                                      ? () => editNoteHandler(notes)
+                                      : ""
+                                  }
+                                  InputProps={{
+                                    readOnly: true,
+                                    disableUnderline: true,
+                                    onFocus: () => setDescriptionFocused(false),
+                                    onBlur: () => setDescriptionFocused(false),
+                                  }}
+                                  inputProps={{
+                                    style: {
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: 4,
+                                      WebkitBoxOrient: "vertical",
+                                      textOverflow: "ellipsis",
+                                      overflow: "hidden",
+                                      cursor:
+                                        notes.noteDescription.split("\n")
+                                          .length > 4
+                                          ? "pointer"
+                                          : "auto",
+                                    },
+                                  }}
+                                />
+                                {notes.noteDescription.length > 180 && (
+                                  <button
+                                    style={{
+                                      background: "none",
+                                      border: "none",
+                                      color: "#1976d2",
+                                    }}
+                                    onClick={() =>
+                                      editNoteHandler(notes, "see-more")
+                                    }
+                                  >
+                                    See more
+                                  </button>
+                                )}
+                              </Tooltip>
+                            </Box>
+
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box sx={{display: "flex", gap: 1}}>
+                                <Button
+                                  variant="contained"
+                                  sx={{
+                                    backgroundColor: "#81c784",
+                                    "&:hover": {
+                                      backgroundColor: "#4caf50",
+                                    },
+                                  }}
+                                  onClick={() => editNoteHandler(notes)}
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  onClick={() => deleteHandler(notes.id)}
+                                  variant="contained"
+                                  sx={{
+                                    backgroundColor: "#ef9a9a",
+                                    "&:hover": {
+                                      backgroundColor: "#c62828",
+                                    },
+                                  }}
+                                  disabled={notes.deleting}
+                                >
+                                  {notes.deleting ? (
+                                    <CircularProgress
+                                      color="inherit"
+                                      size={25}
+                                    />
+                                  ) : (
+                                    "Delete"
+                                  )}
+                                </Button>
+                              </Box>
+                              <Box sx={{marginLeft: "auto"}}>
+                                <Typography key={notes.id} color="#9e9e9e">
+                                  {
+                                    formatDate.find(
+                                      (date) => date.id === notes.id
+                                    )?.createdAt
+                                  }
+                                </Typography>
+                              </Box>
                             </Box>
                           </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  </Grid>
-                ))
-              )}
-            </Grid>
-            {filteredNotes.length < 11 || (
-              <Stack
-                spacing={2}
-                direction="row"
-                sx={{
-                  mt: 4,
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Pagination
-                  size="large"
-                  color="primary"
-                  count={totalPages}
-                  page={currentPage}
-                  onChange={handleChangePage}
-                  variant="outlined"
-                  shape="rounded"
+                    </Grid>
+                  ))
+                )}
+              </Grid>
+              {filteredNotes.length < 11 || (
+                <Stack
+                  spacing={2}
+                  direction="row"
                   sx={{
-                    "& .MuiPaginationItem-root": {
-                      fontWeight: "bold",
-                      borderColor: "primary.main",
-                      backgroundColor: "#bbdefb",
-                      color: "primary.main",
-                    },
-                    "& .MuiPaginationItem-root.Mui-selected": {
-                      borderColor: "primary.main ",
-                      backgroundColor: "primary.main",
-                      color: "white",
-                    },
+                    mt: 4,
+                    display: "flex",
+                    justifyContent: "flex-end",
                   }}
-                />
-              </Stack>
-            )}
-          </Box>
+                >
+                  <Pagination
+                    size="large"
+                    color="primary"
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={handleChangePage}
+                    variant="outlined"
+                    shape="rounded"
+                    sx={{
+                      "& .MuiPaginationItem-root": {
+                        fontWeight: "bold",
+                        borderColor: "primary.main",
+                        backgroundColor: "#bbdefb",
+                        color: "primary.main",
+                      },
+                      "& .MuiPaginationItem-root.Mui-selected": {
+                        borderColor: "primary.main ",
+                        backgroundColor: "primary.main",
+                        color: "white",
+                      },
+                    }}
+                  />
+                </Stack>
+              )}
+            </Box>
+          )
         )}
       </Container>
     </ThemeProvider>

@@ -80,7 +80,11 @@ const NoteHandler = ({
   };
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    if (noteHandler === "see-more") {
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -170,7 +174,9 @@ const NoteHandler = ({
                 variant="contained"
                 color={"primary"}
                 onClick={handleClick}
-                endIcon={<ArrowDropDownIcon />}
+                endIcon={
+                  noteHandler === "see-more" ? <></> : <ArrowDropDownIcon />
+                }
                 sx={{
                   width: "auto",
                   fontSize: { xs: "10px", sm: "13px" },
@@ -243,6 +249,7 @@ const NoteHandler = ({
                   id="title-field"
                   size="small"
                   InputProps={{
+                    readOnly: noteHandler === "see-more" ? true : false,
                     sx: {
                       backgroundColor: "#f8f8ff",
                       fontSize: "20px",
@@ -290,6 +297,7 @@ const NoteHandler = ({
                     "& .MuiInputBase-input": {},
                   }}
                   InputProps={{
+                    readOnly: noteHandler === "see-more" ? true : false,
                     sx: {
                       backgroundColor: "#f8f8ff",
                     },
@@ -319,7 +327,7 @@ const NoteHandler = ({
                   </Button>
                 )}
 
-                {noteHandler === "edit" && (
+                {noteHandler === "edit" ? (
                   <Button
                     onClick={() => {
                       setNoteHandler("");
@@ -337,24 +345,46 @@ const NoteHandler = ({
                   >
                     Cancel
                   </Button>
+                ) : (
+                  noteHandler === "see-more" && (
+                    <Button
+                      onClick={() => {
+                        setNoteHandler("");
+                      }}
+                      variant="contained"
+                      sx={{
+                        mr: 6,
+                        height: "38px",
+                        width: "153px",
+                        backgroundColor: "#9e9e9e",
+                        "&:hover": {
+                          backgroundColor: "#757575",
+                        },
+                      }}
+                    >
+                      Back
+                    </Button>
+                  )
                 )}
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    height: "38px",
-                    width: "153px",
-                  }}
-                >
-                  {noteSubmissionLoading ? (
-                    <CircularProgress color="inherit" size={25} />
-                  ) : noteHandler === "edit" ? (
-                    "Update"
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
+                {noteHandler !== "see-more" && (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      height: "38px",
+                      width: "153px",
+                    }}
+                  >
+                    {noteSubmissionLoading ? (
+                      <CircularProgress color="inherit" size={25} />
+                    ) : noteHandler === "edit" ? (
+                      "Update"
+                    ) : (
+                      "Submit"
+                    )}
+                  </Button>
+                )}
               </Box>
             </Grid>
           </Grid>
