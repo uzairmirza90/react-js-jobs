@@ -16,6 +16,7 @@ import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../Firebase-config";
 import { serverTimestamp } from "firebase/firestore";
 import { auth } from "../../Firebase-config";
+import TruncatedTextField from "../ui-blocks/TruncatedTextField";
 
 const NoteHandler = ({
   titleText,
@@ -240,6 +241,7 @@ const NoteHandler = ({
                 <Typography variant="p" sx={{ marginBottom: 1 }}>
                   Title*
                 </Typography>
+                <TruncatedTextField required onChange={titleHandler} value={title} maxLength={100} />
                 <TextField
                   required
                   onChange={titleHandler}
