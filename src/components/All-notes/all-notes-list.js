@@ -354,6 +354,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                   },
                                 }}
                               />
+
                               {notes.noteDescription.length > 180 && (
                                 <button
                                   style={{

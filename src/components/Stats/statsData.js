@@ -107,7 +107,7 @@ const StatsData = function () {
                     p: 10,
                   }}
                 >
-                  Not Found!
+                  Please add some notes!
                 </Typography>
               ) : (
                 Object.entries(noteTypeCounts).map(([type, count], index) => (

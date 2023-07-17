@@ -219,7 +219,7 @@ const Layout = ({ children }) => {
                   fontSize: { xs: "25px", sm: "28px" },
                 }}
               >
-                {setMaxWidth ? "JobsLand" : "Dashboard"}
+                {setMaxWidth ? "NotesLand" : "Dashboard"}
               </Typography>
             </Box>
             <Button
