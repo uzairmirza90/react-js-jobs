@@ -282,7 +282,29 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                             />
                           </Box>
 
-                          <Box
+                          <Box sx={{wordWrap: "break-word"}}>
+                            <Typography>
+                              {notes.noteTitle.length > 30
+                                ? notes.noteTitle.substring(0, 30) + "..."
+                                : notes.noteTitle}
+                              {notes.noteTitle.length > 30 && (
+                                <button
+                                  style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: "#1976d2",
+                                  }}
+                                  onClick={() =>
+                                    editNoteHandler(notes, "see-more")
+                                  }
+                                >
+                                  See more
+                                </button>
+                              )}
+                            </Typography>
+                          </Box>
+
+                          {/* <Box
                             marginBottom={1}
                             sx={{
                               position: "relative",
@@ -308,7 +330,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                                 },
                               }}
                             />
-                          </Box>
+                          </Box> */}
 
                           <Divider style={{width: "auto", marginBottom: 10}} />
 
