@@ -2,25 +2,25 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {Divider, Typography, CircularProgress} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Divider, Typography, CircularProgress } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {Button, Dialog} from "@mui/material";
+import { Button, Dialog } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {useTheme} from "@mui/material";
+import { useTheme } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import {getDocs, collection, query, orderBy, where} from "firebase/firestore";
-import {db} from "../../Firebase-config";
-import {ToastContainer, toast} from "react-toastify";
+import { getDocs, collection, query, orderBy, where } from "firebase/firestore";
+import { db } from "../../Firebase-config";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useState, useEffect, useRef} from "react";
-import {deleteDoc, doc} from "firebase/firestore";
+import { useState, useEffect, useRef } from "react";
+import { deleteDoc, doc } from "firebase/firestore";
 import NoteHandler from "../notehandler/NoteHandler";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
-import {auth} from "../../Firebase-config";
+import { auth } from "../../Firebase-config";
 
 const defaultTheme = createTheme({
   palette: {
@@ -30,7 +30,7 @@ const defaultTheme = createTheme({
   },
 });
 
-const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
+const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
   const theme = useTheme();
   const isMobileSize = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -85,7 +85,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
     try {
       const updatedNotesList = notesList.map((note) => {
         if (note.id === noteId) {
-          return {...note, deleting: true};
+          return { ...note, deleting: true };
         }
         return note;
       });
@@ -204,7 +204,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                 maxWidth: "1150px",
               }}
             >
-              <Typography sx={{fontWeight: "bold", fontSize: "25px"}}>
+              <Typography sx={{ fontWeight: "bold", fontSize: "25px" }}>
                 List {notesList.length === 0 ? "" : notesList.length}
               </Typography>
 
@@ -232,7 +232,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                       p: 10,
                     }}
                   >
-                    Not Found!
+                    Please add new note!
                   </Typography>
                 ) : (
                   paginatedNotes.map((notes) => (
@@ -269,7 +269,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                             <Typography
                               variant="p"
                               color="#9e9e9e"
-                              sx={{marginBottom: 1}}
+                              sx={{ marginBottom: 1 }}
                             >
                               Title
                             </Typography>
@@ -282,7 +282,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                             />
                           </Box>
 
-                          <Box sx={{wordWrap: "break-word"}}>
+                          <Box sx={{ wordWrap: "break-word" }}>
                             <Typography>
                               {notes.noteTitle.length > 30
                                 ? notes.noteTitle.substring(0, 30) + "..."
@@ -293,6 +293,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                                     background: "none",
                                     border: "none",
                                     color: "#1976d2",
+                                    cursor: "pointer",
                                   }}
                                   onClick={() =>
                                     editNoteHandler(notes, "see-more")
@@ -332,7 +333,9 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                             />
                           </Box> */}
 
-                          <Divider style={{width: "auto", marginBottom: 10}} />
+                          <Divider
+                            style={{ width: "auto", marginBottom: 10 }}
+                          />
 
                           <Box
                             sx={{
@@ -344,11 +347,11 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                             <Typography
                               variant="p"
                               color="#9e9e9e"
-                              sx={{marginBottom: 1}}
+                              sx={{ marginBottom: 1 }}
                             >
                               Description
                             </Typography>
-                            <Box sx={{wordWrap: "break-word", height: 110}}>
+                            <Box sx={{ wordWrap: "break-word", height: 110 }}>
                               <Typography>
                                 {notes.noteDescription.length > 220
                                   ? notes.noteDescription.substring(0, 150) +
@@ -360,6 +363,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                                       background: "none",
                                       border: "none",
                                       color: "#1976d2",
+                                      cursor: "pointer",
                                     }}
                                     onClick={() =>
                                       editNoteHandler(notes, "see-more")
@@ -453,7 +457,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                                 alignItems: "center",
                               }}
                             >
-                              <Box sx={{display: "flex", gap: 1}}>
+                              <Box sx={{ display: "flex", gap: 1 }}>
                                 <Button
                                   variant="contained"
                                   sx={{
@@ -487,7 +491,7 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                                   )}
                                 </Button>
                               </Box>
-                              <Box sx={{marginLeft: "auto"}}>
+                              <Box sx={{ marginLeft: "auto" }}>
                                 <Typography key={notes.id} color="#9e9e9e">
                                   {
                                     formatDate.find(

@@ -101,10 +101,10 @@ const StatsData = function () {
                   variant="h6"
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
+
                     justifyContent: "space-around",
                     width: "100%",
-                    p: 10,
+                    mt: "18%",
                   }}
                 >
                   Please add some notes!
@@ -185,7 +185,11 @@ const StatsData = function () {
                 width="80vw"
                 sx={{ marginTop: 5 }}
               >
-                <BarChart notesList={notesList} loadingNotes={loadingNotes} />
+                {notesList.length !== 0 ? (
+                  <BarChart notesList={notesList} loadingNotes={loadingNotes} />
+                ) : (
+                  ""
+                )}
               </Box>
             </Grid>
           </Box>
