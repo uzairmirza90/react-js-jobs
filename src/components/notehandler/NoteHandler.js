@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {
   Box,
   Grid,
@@ -11,11 +11,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { toast } from "react-toastify";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
-import { db } from "../../Firebase-config";
-import { serverTimestamp } from "firebase/firestore";
-import { auth } from "../../Firebase-config";
+import {toast} from "react-toastify";
+import {addDoc, collection, updateDoc, doc} from "firebase/firestore";
+import {db} from "../../Firebase-config";
+import {serverTimestamp} from "firebase/firestore";
+import {auth} from "../../Firebase-config";
 
 const NoteHandler = ({
   titleText,
@@ -167,7 +167,7 @@ const NoteHandler = ({
               justifyContent: "space-between",
             }}
           >
-            <Typography sx={{ fontSize: "25px" }}>{titleText}</Typography>
+            <Typography sx={{fontSize: "25px"}}>{titleText}</Typography>
 
             <>
               <Button
@@ -179,7 +179,7 @@ const NoteHandler = ({
                 }
                 sx={{
                   width: "auto",
-                  fontSize: { xs: "10px", sm: "13px" },
+                  fontSize: {xs: "10px", sm: "13px"},
                   backgroundColor: buttonColor,
                   "&:hover": {
                     backgroundColor: buttonColor,
@@ -236,8 +236,8 @@ const NoteHandler = ({
               lg={12}
             >
               {" "}
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography variant="p" sx={{ marginBottom: 1 }}>
+              <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Typography variant="p" sx={{marginBottom: 1}}>
                   Title*
                 </Typography>
                 <TextField
@@ -281,8 +281,8 @@ const NoteHandler = ({
               lg={12}
             >
               {" "}
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography variant="p" sx={{ marginBottom: 1 }}>
+              <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Typography variant="p" sx={{marginBottom: 1}}>
                   Description
                 </Typography>
                 <TextField
@@ -308,7 +308,7 @@ const NoteHandler = ({
 
             <Grid item xs={12} sm={6} md={4} lg={4}>
               {" "}
-              <Box sx={{ display: "flex", flexDirection: "row", mt: 4 }}>
+              <Box sx={{display: "flex", flexDirection: "row", mt: 4}}>
                 {noteHandler === "add" && (
                   <Button
                     onClick={clearHandler}

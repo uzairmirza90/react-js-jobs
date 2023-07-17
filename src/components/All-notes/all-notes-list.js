@@ -288,48 +288,26 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                               position: "relative",
                             }}
                           >
-                            <Tooltip
-                              title="click to expand"
-                              placement="top"
-                              enterTouchDelay={0}
-                              disableHoverListener={
-                                !isDescriptionFocused &&
-                                notes.noteTitle.split("\n").length <= 1
-                              }
-                              followCursor
-                            >
-                              <TextField
-                                multiline
-                                rows={1}
-                                fullWidth
-                                value={notes.noteTitle}
-                                variant="standard"
-                                onClick={
-                                  notes.noteTitle.split("\n").length > 1
-                                    ? () => editNoteHandler(notes)
-                                    : ""
-                                }
-                                InputProps={{
-                                  readOnly: true,
-                                  disableUnderline: true,
-                                  onFocus: () => setDescriptionFocused(false),
-                                  onBlur: () => setDescriptionFocused(false),
-                                }}
-                                inputProps={{
-                                  style: {
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 1,
-                                    WebkitBoxOrient: "vertical",
-                                    textOverflow: "ellipsis",
-                                    overflow: "hidden",
-                                    cursor:
-                                      notes.noteTitle.split("\n").length > 1
-                                        ? "pointer"
-                                        : "auto",
-                                  },
-                                }}
-                              />
-                            </Tooltip>
+                            <TextField
+                              multiline
+                              rows={1}
+                              fullWidth
+                              value={notes.noteTitle}
+                              variant="standard"
+                              InputProps={{
+                                readOnly: true,
+                                disableUnderline: true,
+                              }}
+                              inputProps={{
+                                style: {
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 1,
+                                  WebkitBoxOrient: "vertical",
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                },
+                              }}
+                            />
                           </Box>
 
                           <Divider style={{width: "auto", marginBottom: 10}} />
@@ -377,26 +355,35 @@ const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
                                 position: "relative",
                               }}
                             >
-                              <Tooltip
-                                title="click to expand"
-                                placement="top"
-                                enterTouchDelay={0}
-                                disableHoverListener={
-                                  !isDescriptionFocused &&
-                                  notes.noteDescription.split("\n").length <= 4
-                                }
-                                followCursor
-                              >
-                                <TextField
-                                  multiline
-                                  rows={4}
-                                  fullWidth
-                                  value={notes.noteDescription}
-                                  variant="standard"
-                                  onClick={
-                                    notes.noteDescription.split("\n").length > 4
-                                      ? () => editNoteHandler(notes)
-                                      : ""
+                              <TextField
+                                multiline
+                                rows={4}
+                                fullWidth
+                                value={notes.noteDescription}
+                                variant="standard"
+                                InputProps={{
+                                  readOnly: true,
+                                  disableUnderline: true,
+                                }}
+                                inputProps={{
+                                  style: {
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 4,
+                                    WebkitBoxOrient: "vertical",
+                                    textOverflow: "ellipsis",
+                                    overflow: "hidden",
+                                  },
+                                }}
+                              />
+                              {notes.noteDescription.length > 180 && (
+                                <button
+                                  style={{
+                                    background: "none",
+                                    border: "none",
+                                    color: "#1976d2",
+                                  }}
+                                  onClick={() =>
+                                    editNoteHandler(notes, "see-more")
                                   }
                                   InputProps={{
                                     readOnly: true,
