@@ -2,25 +2,25 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Divider, Typography, CircularProgress } from "@mui/material";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {Divider, Typography, CircularProgress} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { Button, Dialog } from "@mui/material";
+import {Button, Dialog} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material";
+import {useTheme} from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { getDocs, collection, query, orderBy, where } from "firebase/firestore";
-import { db } from "../../Firebase-config";
-import { ToastContainer, toast } from "react-toastify";
+import {getDocs, collection, query, orderBy, where} from "firebase/firestore";
+import {db} from "../../Firebase-config";
+import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useState, useEffect, useRef } from "react";
-import { deleteDoc, doc } from "firebase/firestore";
+import {useState, useEffect, useRef} from "react";
+import {deleteDoc, doc} from "firebase/firestore";
 import NoteHandler from "../notehandler/NoteHandler";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
-import { auth } from "../../Firebase-config";
+import {auth} from "../../Firebase-config";
 
 const defaultTheme = createTheme({
   palette: {
@@ -30,7 +30,7 @@ const defaultTheme = createTheme({
   },
 });
 
-const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
+const AllNotesList = function ({searchQuery, typeFilter, sortFilter}) {
   const theme = useTheme();
   const isMobileSize = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -85,7 +85,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
     try {
       const updatedNotesList = notesList.map((note) => {
         if (note.id === noteId) {
-          return { ...note, deleting: true };
+          return {...note, deleting: true};
         }
         return note;
       });
@@ -332,7 +332,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             </Tooltip>
                           </Box>
 
-                          <Divider style={{ width: "auto", marginBottom: 10 }} />
+                          <Divider style={{width: "auto", marginBottom: 10}} />
 
                           <Box
                             sx={{
@@ -348,7 +348,30 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                             >
                               Description
                             </Typography>
-                            <Box
+                            <Box sx={{wordWrap: "break-word", height: 110}}>
+                              <Typography>
+                                {notes.noteDescription.length > 220
+                                  ? notes.noteDescription.substring(0, 150) +
+                                    "..."
+                                  : notes.noteDescription}
+                                {notes.noteDescription.length > 220 && (
+                                  <button
+                                    style={{
+                                      background: "none",
+                                      border: "none",
+                                      color: "#1976d2",
+                                    }}
+                                    onClick={() =>
+                                      editNoteHandler(notes, "see-more")
+                                    }
+                                  >
+                                    See more
+                                  </button>
+                                )}
+                              </Typography>
+                            </Box>
+
+                            {/* <Box
                               marginBottom={1}
                               sx={{
                                 position: "relative",
@@ -411,7 +434,7 @@ const AllNotesList = function ({ searchQuery, typeFilter, sortFilter }) {
                                   </button>
                                 )}
                               </Tooltip>
-                            </Box>
+                            </Box> */}
 
                             <Box
                               sx={{
