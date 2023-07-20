@@ -156,7 +156,7 @@ const Profile = function () {
               }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={4}>
+                <Grid item xs={12} sm={12} md={4} lg={4}>
                   {" "}
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="p" sx={{ marginBottom: 1 }}>
@@ -181,7 +181,7 @@ const Profile = function () {
                   </Box>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={4}>
+                <Grid item xs={12} sm={12} md={4} lg={4}>
                   {" "}
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="p" sx={{ marginBottom: 1 }}>
@@ -215,7 +215,7 @@ const Profile = function () {
                     />
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={4}>
+                <Grid item xs={12} sm={12} md={4} lg={4}>
                   {" "}
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="p" sx={{ marginBottom: 1 }}>
@@ -262,7 +262,7 @@ const Profile = function () {
                   </Box>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={4}>
+                <Grid item xs={12} sm={12} md={4} lg={4}>
                   {" "}
                   <Button
                     variant="contained"

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -11,11 +11,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import {toast} from "react-toastify";
-import {addDoc, collection, updateDoc, doc} from "firebase/firestore";
-import {db} from "../../Firebase-config";
-import {serverTimestamp} from "firebase/firestore";
-import {auth} from "../../Firebase-config";
+import { toast } from "react-toastify";
+import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { db } from "../../Firebase-config";
+import { serverTimestamp } from "firebase/firestore";
+import { auth } from "../../Firebase-config";
 
 const NoteHandler = ({
   titleText,
@@ -156,54 +156,52 @@ const NoteHandler = ({
         borderTop: "5px solid #1976d2",
       }}
     >
-      <Grid container spacing={2}>
+      {/* <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          {" "}
-          <Box
+          {" "} */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography sx={{ fontSize: "25px" }}>{titleText}</Typography>
+
+        <>
+          <Button
+            variant="contained"
+            color={"primary"}
+            onClick={handleClick}
+            endIcon={noteHandler === "see-more" ? <></> : <ArrowDropDownIcon />}
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
+              width: "auto",
+              fontSize: { xs: "10px", sm: "13px" },
+              backgroundColor: buttonColor,
+              "&:hover": {
+                backgroundColor: buttonColor,
+              },
             }}
           >
-            <Typography sx={{fontSize: "25px"}}>{titleText}</Typography>
+            {selectedItem}
+          </Button>
 
-            <>
-              <Button
-                variant="contained"
-                color={"primary"}
-                onClick={handleClick}
-                endIcon={
-                  noteHandler === "see-more" ? <></> : <ArrowDropDownIcon />
-                }
-                sx={{
-                  width: "auto",
-                  fontSize: {xs: "10px", sm: "13px"},
-                  backgroundColor: buttonColor,
-                  "&:hover": {
-                    backgroundColor: buttonColor,
-                  },
-                }}
-              >
-                {selectedItem}
-              </Button>
-
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={menuItemHandler}>Important</MenuItem>
-                <MenuItem onClick={menuItemHandler}>Work</MenuItem>
-                <MenuItem onClick={menuItemHandler}>Study</MenuItem>
-                <MenuItem onClick={menuItemHandler}>Personal</MenuItem>
-                <MenuItem onClick={menuItemHandler}>Random</MenuItem>
-              </Menu>
-            </>
-          </Box>
-        </Grid>
-      </Grid>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={menuItemHandler}>Important</MenuItem>
+            <MenuItem onClick={menuItemHandler}>Work</MenuItem>
+            <MenuItem onClick={menuItemHandler}>Study</MenuItem>
+            <MenuItem onClick={menuItemHandler}>Personal</MenuItem>
+            <MenuItem onClick={menuItemHandler}>Random</MenuItem>
+          </Menu>
+        </>
+      </Box>
+      {/* </Grid>
+      </Grid> */}
 
       <form onSubmit={handleSubmit}>
         <Box
@@ -211,33 +209,15 @@ const NoteHandler = ({
             display: "flex",
             flexDirection: "column",
             flexWrap: "wrap",
-            justifyContent: "space-between",
+
             paddingTop: "25px",
           }}
         >
           <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              sm={
-                maxWidth750
-                  ? maxWidth715
-                    ? maxWidth700
-                      ? maxWidth685
-                        ? maxWidth625
-                          ? 7.5
-                          : 8.5
-                        : 9.5
-                      : 10.5
-                    : 11.5
-                  : 12
-              }
-              md={12}
-              lg={12}
-            >
+            <Grid item xs={12} sm={12} md={12} lg={12}>
               {" "}
-              <Box sx={{display: "flex", flexDirection: "column"}}>
-                <Typography variant="p" sx={{marginBottom: 1}}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography variant="p" sx={{ marginBottom: 1 }}>
                   Title*
                 </Typography>
                 <TextField
@@ -265,24 +245,25 @@ const NoteHandler = ({
               item
               xs={12}
               sm={
-                maxWidth750
-                  ? maxWidth715
-                    ? maxWidth700
-                      ? maxWidth685
-                        ? maxWidth625
-                          ? 7.5
-                          : 8.5
-                        : 9.5
-                      : 10.5
-                    : 11.5
-                  : 12
+                12
+                // maxWidth750
+                //   ? maxWidth715
+                //     ? maxWidth700
+                //       ? maxWidth685
+                //         ? maxWidth625
+                //           ? 7.5
+                //           : 8.5
+                //         : 9.5
+                //       : 10.5
+                //     : 11.5
+                //   : 12
               }
               md={12}
               lg={12}
             >
               {" "}
-              <Box sx={{display: "flex", flexDirection: "column"}}>
-                <Typography variant="p" sx={{marginBottom: 1}}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography variant="p" sx={{ marginBottom: 1 }}>
                   Description
                 </Typography>
                 <TextField
@@ -308,7 +289,14 @@ const NoteHandler = ({
 
             <Grid item xs={12} sm={6} md={4} lg={4}>
               {" "}
-              <Box sx={{display: "flex", flexDirection: "row", mt: 4}}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  mt: 4,
+                }}
+              >
                 {noteHandler === "add" && (
                   <Button
                     onClick={clearHandler}
@@ -316,7 +304,7 @@ const NoteHandler = ({
                     sx={{
                       mr: 6,
                       height: "38px",
-                      width: "153px",
+                      width: "100%",
                       backgroundColor: "#9e9e9e",
                       "&:hover": {
                         backgroundColor: "#757575",
@@ -336,7 +324,7 @@ const NoteHandler = ({
                     sx={{
                       mr: 6,
                       height: "38px",
-                      width: "153px",
+                      width: "100%",
                       backgroundColor: "#9e9e9e",
                       "&:hover": {
                         backgroundColor: "#757575",
@@ -355,7 +343,7 @@ const NoteHandler = ({
                       sx={{
                         mr: 6,
                         height: "38px",
-                        width: "153px",
+                        width: "100%",
                         backgroundColor: "#9e9e9e",
                         "&:hover": {
                           backgroundColor: "#757575",
@@ -373,7 +361,7 @@ const NoteHandler = ({
                     variant="contained"
                     sx={{
                       height: "38px",
-                      width: "153px",
+                      width: "100%",
                     }}
                   >
                     {noteSubmissionLoading ? (
